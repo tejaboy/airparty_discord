@@ -9,5 +9,8 @@
     "tunnel": "cloudflared tunnel --url http://localhost:3000"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "kaboom": "^3000.1.17"
+  }
 }

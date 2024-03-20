@@ -1,10 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+import { discordSdk } from './discordSdk';
 import './index.css';
+import kaboom from 'kaboom'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Initialize Kaboom
+export const k = kaboom({
+	background: "41D9FF"
+});
+
+const text = k.add([
+  k.text("hello world " + discordSdk.channelId),
+  k.pos(k.center()),
+  k.anchor("center")
+])

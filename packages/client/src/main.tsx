@@ -1,7 +1,7 @@
 import { Player } from '../../server/src/entities/Player';
 import { setUpDiscordSdk } from './helper/setUpDiscordSdk';
 import './index.css';
-import kaboom from 'kaboom'
+import kaboom, { Vec2 } from 'kaboom'
 
 // Initialize Kaboom
 export const k = kaboom({
@@ -28,12 +28,14 @@ setUpDiscordSdk().then(({avatarUri, name, client, room}) => {
 	room.onStateChange((state) => {
 		let indexTeam0 = 0;
 		let indexTeam1 = 0;
-		
+
 		// Remove previous ui
 		k.destroyAll("waiting-ui");
 
 		// Loop through all players
 		state.players.forEach((player: Player, key: string) => {
+			k.loadSprite("player_" + player.name, player.avatarUri);
+
 			// Log information
 			console.log(`Player ID: ${key}`);
 			console.log(`Name: ${player.name}`);
@@ -54,6 +56,15 @@ setUpDiscordSdk().then(({avatarUri, name, client, room}) => {
 				"waiting-ui"
 			]);
 
+			// Add player avatar
+			playerSprite.add([
+				k.sprite("player_" + player.name),
+				k.pos(6, -16),
+				k.anchor("center"),
+				k.scale(0.1),
+				"waiting-ui"
+			])
+
 			// Add player name
 			playerSprite.add([
 				k.text(player.name, {size: 12}),
@@ -66,7 +77,7 @@ setUpDiscordSdk().then(({avatarUri, name, client, room}) => {
 			playerSprite.add([
 				k.text(player.ready ? "READY" : "NOT READY", {size: 12}),
 				player.ready ? k.color(0, 255, 0) : k.color(255, 0, 0),
-				k.pos(0, 20),
+				k.pos(0, 10),
 				k.anchor("center"),
 				"waiting-ui"
 			]);

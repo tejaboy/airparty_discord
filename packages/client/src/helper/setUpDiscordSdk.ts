@@ -111,10 +111,6 @@ export const setUpDiscordSdk = async () => {
       avatarUri,
     });
   
-    console.log(avatarUri);
-    console.log(client);
-    console.log(newRoom);
-  
     // Finally, we construct our authenticatedContext object to be consumed throughout the app
     return { avatarUri, name, client, room: newRoom };
 };

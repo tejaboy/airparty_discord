@@ -18,6 +18,24 @@ export class Player extends Schema {
   @type('boolean')
   public talking: boolean = false;
 
+  @type("boolean")
+  public ready: boolean = false;
+  
+	@type("boolean")
+  public isHost: boolean = false;
+
+  @type("number")
+  public bulletLeft: number = 60;
+
+  @type("number")
+  public reloadTimer: number = 0;
+
+  @type("number")
+  public teamId: number = 0;
+
+  @type("number")
+  public spriteId: number = 1;
+
   // Init
   constructor({name, userId, avatarUri, sessionId}: TPlayerOptions) {
     super();

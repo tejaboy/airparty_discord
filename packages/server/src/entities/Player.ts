@@ -20,9 +20,6 @@ export class Player extends Schema {
 
   @type("boolean")
   public ready: boolean = false;
-  
-	@type("boolean")
-  public isHost: boolean = false;
 
   @type("number")
   public bulletLeft: number = 60;

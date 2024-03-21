@@ -35,6 +35,7 @@ export class State extends Schema {
       this.players.set(playerOptions.userId, new Player({
         ...playerOptions,
         sessionId,
+        teamId: this.countPlayersInTeam(0) > this.countPlayersInTeam(1) ? 1 : 0,
         spriteId: Math.floor(Math.random() * 3) + 1
       }));
     }
@@ -60,4 +61,14 @@ export class State extends Schema {
       player.talking = false;
     }
   }
+
+  countPlayersInTeam(teamIdToCount: number): number {
+		let count = 0;
+		for (const player of this.players.values()) {
+			if (player.teamId === teamIdToCount) {
+				count++; // Increment count if the player's teamId matches the specified teamId
+			}
+		}
+		return count;
+	}
 }

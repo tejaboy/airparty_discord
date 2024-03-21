@@ -2,9 +2,12 @@ import { Room } from "colyseus.js";
 import { Player } from "../../../server/src/entities/Player";
 import { State } from "../../../server/src/entities/State";
 import { k } from "../main";
+import { addButton } from "../helper/addButton";
 
 export function createHostWaitingScene() {
     k.scene("host-waiting", (room: Room<State>) => {
+        let myPlayer: Player;
+
         room.onStateChange((state) => {
             let indexTeam0 = 0;
             let indexTeam1 = 0;
@@ -14,6 +17,10 @@ export function createHostWaitingScene() {
     
             // Loop through all players
             state.players.forEach((player: Player, key: string) => {
+                if (player.sessionId == room.sessionId) {
+                    myPlayer = player;
+                }
+
                 k.loadSprite("player_" + player.name, player.avatarUri);
     
                 // Log information
@@ -61,6 +68,11 @@ export function createHostWaitingScene() {
                     k.anchor("center"),
                     "waiting-ui"
                 ]);
+            });
+
+            // Add button to toggle ready state
+            addButton(myPlayer.ready ? "UNREADY" : "READY", k.center(), "waiting-ui", (bg, text) => {
+                room.send('ready');
             });
         });
     });

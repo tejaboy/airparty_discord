@@ -62,6 +62,13 @@ export class State extends Schema {
     }
   }
 
+  setPlayerReady(sessionId: string) {
+    const player = this._getPlayer(sessionId);
+    if (player != null) {
+      player.ready = !player.ready;
+    }
+  }
+
   countPlayersInTeam(teamIdToCount: number): number {
 		let count = 0;
 		for (const player of this.players.values()) {

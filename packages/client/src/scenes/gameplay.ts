@@ -31,9 +31,9 @@ export function createGameplayScene() {
             ]);
 
             playerSprite.onUpdate(() => {
-                playerSprite.pos.x = player.x;
-                playerSprite.pos.y = player.y;
-                playerSprite.angle = player.angle;
+                playerSprite.pos.x += (player.x - playerSprite.pos.x) * 1 * k.dt();
+                playerSprite.pos.y += (player.y - playerSprite.pos.y) * 1 * k.dt();
+                playerSprite.angle += (player.angle - playerSprite.angle) * 1 * k.dt();
             });
         });
     });

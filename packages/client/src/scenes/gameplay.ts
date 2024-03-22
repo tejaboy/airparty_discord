@@ -3,6 +3,7 @@ import { Player } from "../../../server/src/entities/Player";
 import { State } from "../../../server/src/entities/State";
 import { k } from "../main";
 import { getTeamColor } from "./host-waiting";
+import { GAME_WIDTH } from "../../../server/src/shared/Constants";
 
 export function createGameplayScene() {
     k.scene("gameplay", (room: Room<State>) => {
@@ -31,11 +32,18 @@ export function createGameplayScene() {
             ]);
 
             playerSprite.onUpdate(() => {
-                playerSprite.pos.x += (player.x - playerSprite.pos.x) * 12 * k.dt();
-                playerSprite.pos.y += (player.y - playerSprite.pos.y) * 12 * k.dt();
-                
+                // Lerp angle
                 let shortestAngle = ((((player.angle - playerSprite.angle) % 360) + 540) % 360) - 180;
                 playerSprite.angle = playerSprite.angle + shortestAngle * 12 * k.dt();
+
+                // Lerp position - if distance is too far, then we change immediately (maybe bound?)
+                if (player.x == 0 || player.x == GAME_WIDTH) {
+                    playerSprite.pos.x = player.x;
+                    playerSprite.pos.y = player.y;
+                } else {
+                    playerSprite.pos.x += (player.x - playerSprite.pos.x) * 12 * k.dt();
+                    playerSprite.pos.y += (player.y - playerSprite.pos.y) * 12 * k.dt();
+                }
             });
         });
 

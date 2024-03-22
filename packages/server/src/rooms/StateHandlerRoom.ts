@@ -1,6 +1,7 @@
 import {Room, Client} from 'colyseus';
 import {TPlayerOptions} from '../entities/Player';
 import {State, IState} from '../entities/State';
+import { GAME_HEIGHT, GAME_WIDTH } from '../shared/Constants';
 
 export class StateHandlerRoom extends Room<State> {
 	maxClients = 1000;
@@ -67,11 +68,21 @@ export class StateHandlerRoom extends Room<State> {
 					player.angle -= angleSpeed * (player.teamId == 0 ? player.movement : -player.movement) * (deltaTime / 1000);
 					player.angle = (player.angle + 360) % 360;
 				}
-				
+
 				// Auto movement in the direction of player's angle
 				const speed = 300;
 				player.x += Math.cos(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
 				player.y += Math.sin(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
+
+				/* BOUNDS */
+                // When reaches end, restart at 0
+                if (player.x > GAME_WIDTH) {
+                    player.x = 0;
+                } else if (player.x < 0) {
+                    player.x = GAME_WIDTH;
+                }
+
+				
 			});
 		});
 	}

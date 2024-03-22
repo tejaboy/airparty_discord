@@ -6,7 +6,9 @@ import { createGameplayScene } from './scenes/gameplay';
 
 // Initialize Kaboom
 export const k = kaboom({
-	background: "41D9FF"
+	background: "41D9FF",
+	width: 1280,
+	height: 600
 });
 
 const text = k.add([

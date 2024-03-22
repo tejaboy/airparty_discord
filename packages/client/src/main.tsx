@@ -3,12 +3,13 @@ import './index.css';
 import kaboom from 'kaboom'
 import { createHostWaitingScene } from './scenes/host-waiting';
 import { createGameplayScene } from './scenes/gameplay';
+import { GAME_HEIGHT, GAME_WIDTH } from '../../server/src/shared/Constants';
 
 // Initialize Kaboom
 export const k = kaboom({
 	background: "41D9FF",
-	width: 1280,
-	height: 600
+	width: GAME_WIDTH,
+	height: GAME_HEIGHT
 });
 
 const text = k.add([

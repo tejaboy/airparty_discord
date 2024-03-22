@@ -1,7 +1,7 @@
 import {Room, Client} from 'colyseus';
 import {Player, TPlayerOptions} from '../entities/Player';
 import {State, IState} from '../entities/State';
-import { GAME_HEIGHT, GAME_WIDTH } from '../shared/Constants';
+import { BULLET_INTERVAL, GAME_HEIGHT, GAME_WIDTH } from '../shared/Constants';
 
 export class StateHandlerRoom extends Room<State> {
 	maxClients = 1000;
@@ -39,6 +39,10 @@ export class StateHandlerRoom extends Room<State> {
 
 		this.onMessage('movement', (client, data) => {
 			this.state.setMovement(client.sessionId, data.value);
+		});
+
+		this.onMessage('shooting', (client, isShooting) => {
+			this.state.setShooting(client.sessionId, isShooting);
 		});
 	}
 
@@ -100,6 +104,19 @@ export class StateHandlerRoom extends Room<State> {
                 	this.broadcast("addMessage", `${player.name} crashed!`);
                     this.damagePlayer(player, 100);
                 }
+
+				/* SHOOT */
+				player.bulletTimer += deltaTime / 1000;
+				if (player.isShooting && player.bulletTimer > BULLET_INTERVAL && player.bulletLeft > 0) {
+					player.bulletTimer = 0;
+					this.broadcast("createProjectile", {
+						x: player.x,
+						y: player.y,
+						angle: player.teamId == 0 ? player.angle : (player.angle - 180) % 360,
+						targetTeamId: player.teamId == 0 ? "team1" : "team0",
+						owner: player.name
+					});
+				}
 			});
 		});
 	}

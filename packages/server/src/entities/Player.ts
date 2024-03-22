@@ -1,4 +1,5 @@
 import {Schema, type} from '@colyseus/schema';
+import { BULLET_INTERVAL } from '../shared/Constants';
 
 export type TPlayerOptions = Pick<Player, 'sessionId' | 'userId' | 'name' | 'avatarUri' | 'talking' | 'spriteId' | 'teamId' | 'x' | 'y'>;
 
@@ -20,6 +21,12 @@ export class Player extends Schema {
 
 	@type("boolean")
 	public ready: boolean = false;
+
+	@type("boolean")
+	public isShooting: boolean = false;
+
+	@type("number")
+	public bulletTimer: number = BULLET_INTERVAL; // interval between each shot
 
 	@type("number")
 	public bulletLeft: number = 60;

@@ -83,6 +83,13 @@ export class State extends Schema {
 		}
 	}
 
+	setShooting(sessionId: string, isShooting: boolean) {
+		const player = this._getPlayer(sessionId);
+		if (player != null) {
+			player.isShooting = isShooting;
+		}
+	}
+
 	countPlayersInTeam(teamIdToCount: number): number {
 		let count = 0;
 		for (const player of this.players.values()) {

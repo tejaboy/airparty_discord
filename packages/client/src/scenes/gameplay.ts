@@ -76,6 +76,24 @@ export function createGameplayScene() {
             room.send("movement", { value: value });
         }
 
+        /* SHOOTING */
+        let isShooting = false;
+        k.onKeyDown("space", () => {
+            setShooting(true);
+        });
+
+        k.onKeyRelease("space", () => {
+            setShooting(false);
+        });
+
+        function setShooting(value: boolean) {
+            if (isShooting == value) return;
+            
+            isShooting = value;
+            room.send("shooting", isShooting);
+        }
+
+        /** SERVER EVENT LISTENER **/
         // addMessage event
         room.onMessage("addMessage", (message) => {
             addMessage(message);
@@ -86,6 +104,17 @@ export function createGameplayScene() {
             let playerSprite: GameObj = playerObjects[userId];
             playerSprite.destroy();
             addExplosion(playerSprite.pos);
+        });
+
+        // createProjectile event
+        room.onMessage("createProjectile", (message) => {
+            createProjectile(
+                message.x,
+                message.y,
+                message.angle,
+                message.targetTeamId,
+                message.ownerName
+            );
         });
     });
 }
@@ -117,4 +146,18 @@ function addExplosion(pos: Vec2, scale: number = 1) {
     explosive.onAnimEnd(() => {
         k.destroy(explosive);
     })
+}
+
+function createProjectile(x: number, y: number, angle: number, targetTag: string, ownerName: string) {
+    const BULLET_SPEED = 2200;
+    const projectile = k.add([
+		k.sprite("bullet1"),
+		k.pos(x, y),
+		k.anchor("center"),
+		k.area(),
+		k.move(angle, BULLET_SPEED),
+		k.rotate(angle),
+		k.offscreen({ destroy: true }),
+        k.z(1)
+	]);
 }

@@ -31,11 +31,11 @@ export function createGameplayScene() {
             ]);
 
             playerSprite.onUpdate(() => {
-                playerSprite.pos.x += (player.x - playerSprite.pos.x) * 1 * k.dt();
-                playerSprite.pos.y += (player.y - playerSprite.pos.y) * 1 * k.dt();
+                playerSprite.pos.x += (player.x - playerSprite.pos.x) * 12 * k.dt();
+                playerSprite.pos.y += (player.y - playerSprite.pos.y) * 12 * k.dt();
                 
                 let shortestAngle = ((((player.angle - playerSprite.angle) % 360) + 540) % 360) - 180;
-                playerSprite.angle = playerSprite.angle + shortestAngle * 20 * k.dt();
+                playerSprite.angle = playerSprite.angle + shortestAngle * 12 * k.dt();
             });
         });
 

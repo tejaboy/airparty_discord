@@ -71,8 +71,16 @@ export class StateHandlerRoom extends Room<State> {
 
 				// Auto movement in the direction of player's angle
 				const speed = 300;
-				player.x += Math.cos(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
-				player.y += Math.sin(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
+				const nextX = Math.cos(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
+				const nextY = Math.sin(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
+				if (player.teamId == 0) {
+					player.x += nextX;
+					player.y += nextY;
+				} else {
+					player.x -= nextX;
+					player.y -= nextY;
+				}
+				
 
 				/* BOUNDS */
                 // When reaches end, restart at 0
@@ -82,7 +90,12 @@ export class StateHandlerRoom extends Room<State> {
                     player.x = GAME_WIDTH;
                 }
 
-				
+				// When hit height or ground, lose the game
+                if (player.y > GAME_HEIGHT || player.y < 0) {
+                    //killfeeds.push([undefined, serverPlayer.name]);
+                    //addMessage(`${serverPlayer.name} crashed!`);
+                    //playerSprite.hurt(100);
+                }
 			});
 		});
 	}

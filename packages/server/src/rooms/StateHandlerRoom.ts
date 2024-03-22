@@ -61,17 +61,17 @@ export class StateHandlerRoom extends Room<State> {
 	startGame() {
 		this.setSimulationInterval((deltaTime) => {
 			this.state.players.forEach((player, sessionId) => {
-				// Auto movemenet to angle direction
-				const speed = 300;
-				//player.x += Math.cos(player.angle) * speed * (deltaTime / 1000);
-				//player.y += Math.sin(player.angle) * speed * (deltaTime / 1000);
-
-				// Move angle based on movement value
+				// Update player angle based on movement value
 				const angleSpeed = 90;
-				if (player.movement != 0) {
-                    player.angle -= angleSpeed * (player.teamId == 0 ? player.movement : -player.movement) * (deltaTime / 1000);
+				if (player.movement !== 0) {
+					player.angle -= angleSpeed * (player.teamId == 0 ? player.movement : -player.movement) * (deltaTime / 1000);
 					player.angle = (player.angle + 360) % 360;
-                }
+				}
+				
+				// Auto movement in the direction of player's angle
+				const speed = 300;
+				player.x += Math.cos(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
+				player.y += Math.sin(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
 			});
 		});
 	}

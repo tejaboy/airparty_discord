@@ -35,7 +35,7 @@ export function createHostWaitingScene() {
                 const playerSprite = k.add([
                     // List of components, each offers a set of functionalities
                     k.sprite(`plane_${player.spriteId}_${getTeamColor(player.teamId)}`, { flipX: player.teamId != 0}),
-                    player.teamId == 0 ? k.pos(100, 200 + (150 * indexTeam0++)) : k.pos(k.width() - 100, 200 + (150 * indexTeam1++)),
+                    k.pos(player.x, player.y),
                     k.area(),
                     k.health(8),
                     k.anchor("center"),
@@ -43,6 +43,7 @@ export function createHostWaitingScene() {
                     "waiting-ui"
                 ]);
     
+                // player.teamId == 0 ? k.pos(100, 200 + (150 * indexTeam0++)) : k.pos(k.width() - 100, 200 + (150 * indexTeam1++)),
                 // Add player avatar
                 playerSprite.add([
                     k.sprite("player_" + player.name),

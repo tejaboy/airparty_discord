@@ -1,5 +1,6 @@
 import {Schema, MapSchema, type} from '@colyseus/schema';
 import {TPlayerOptions, Player} from './Player';
+import { GAME_WIDTH } from '../shared/Constants';
 
 export interface IState {
 	roomName: string;
@@ -31,12 +32,18 @@ export class State extends Schema {
 
 	createPlayer(sessionId: string, playerOptions: TPlayerOptions) {
 		const existingPlayer = Array.from(this.players.values()).find((p) => p.sessionId === sessionId);
+		const teamId = this.countPlayersInTeam(0) > this.countPlayersInTeam(1) ? 1 : 0;
+		const x = teamId == 0 ? 100 : GAME_WIDTH - 100;
+		const y = 200;
+
 		if (existingPlayer == null) {
 			this.players.set(playerOptions.userId, new Player({
 				...playerOptions,
 				sessionId,
-				teamId: this.countPlayersInTeam(0) > this.countPlayersInTeam(1) ? 1 : 0,
-				spriteId: Math.floor(Math.random() * 3) + 1
+				teamId,
+				spriteId: Math.floor(Math.random() * 3) + 1,
+				x,
+				y
 			}));
 		}
 	}

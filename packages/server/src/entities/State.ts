@@ -76,6 +76,13 @@ export class State extends Schema {
 		}
 	}
 
+	setMovement(sessionId: string, movementValue: number) {
+		const player = this._getPlayer(sessionId);
+		if (player != null) {
+			player.movement = movementValue;
+		}
+	}
+
 	countPlayersInTeam(teamIdToCount: number): number {
 		let count = 0;
 		for (const player of this.players.values()) {

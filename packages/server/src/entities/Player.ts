@@ -42,6 +42,9 @@ export class Player extends Schema {
 	@type("number")
 	public angle: number = 0;
 
+	@type("number")
+	public movement: number = 0; // 0 == no move, 1 == move up, -1 == move down
+
 	// Init
 	constructor({name, userId, avatarUri, sessionId, teamId, spriteId, x, y}: TPlayerOptions) {
 		super();

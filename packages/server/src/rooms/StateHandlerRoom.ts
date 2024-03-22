@@ -34,7 +34,11 @@ export class StateHandlerRoom extends Room<State> {
 				this.broadcast("start-game");
 				this.startGame();
 			}
-		})
+		});
+
+		this.onMessage('movement', (client, data) => {
+			this.state.setMovement(client.sessionId, data.value);
+		});
 	}
 
 	onAuth(_client: any, _options: any, _req: any) {
@@ -57,10 +61,17 @@ export class StateHandlerRoom extends Room<State> {
 	startGame() {
 		this.setSimulationInterval((deltaTime) => {
 			this.state.players.forEach((player, sessionId) => {
+				// Auto movemenet to angle direction
 				const speed = 300;
+				//player.x += Math.cos(player.angle) * speed * (deltaTime / 1000);
+				//player.y += Math.sin(player.angle) * speed * (deltaTime / 1000);
 
-				player.x += Math.cos(player.angle) * speed * (deltaTime / 1000);
-				player.y += Math.sin(player.angle) * speed * (deltaTime / 1000);
+				// Move angle based on movement value
+				const angleSpeed = 90;
+				if (player.movement != 0) {
+                    player.angle -= angleSpeed * (player.teamId == 0 ? player.movement : -player.movement) * (deltaTime / 1000);
+					player.angle = (player.angle + 360) % 360;
+                }
 			});
 		});
 	}

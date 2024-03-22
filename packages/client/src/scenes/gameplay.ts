@@ -33,8 +33,34 @@ export function createGameplayScene() {
             playerSprite.onUpdate(() => {
                 playerSprite.pos.x += (player.x - playerSprite.pos.x) * 1 * k.dt();
                 playerSprite.pos.y += (player.y - playerSprite.pos.y) * 1 * k.dt();
-                playerSprite.angle += (player.angle - playerSprite.angle) * 1 * k.dt();
+                
+                let shortestAngle = ((((player.angle - playerSprite.angle) % 360) + 540) % 360) - 180;
+                playerSprite.angle = playerSprite.angle + shortestAngle * 20 * k.dt();
             });
         });
+
+        let currentMovement = 0;
+        k.onKeyDown("w", () => {
+            setMovement(1);
+        });
+
+        k.onKeyRelease("w", () => {
+            setMovement(0);
+        });
+
+        k.onKeyDown("s", () => {
+            setMovement(-1);
+        });
+
+        k.onKeyRelease("s", () => {
+            setMovement(0);
+        });
+
+        function setMovement(value: number) {
+            if (currentMovement == value) return;
+
+            currentMovement = value;
+            room.send("movement", { value: value });
+        }
     });
 }

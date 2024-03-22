@@ -34,7 +34,7 @@ export class State extends Schema {
 		const existingPlayer = Array.from(this.players.values()).find((p) => p.sessionId === sessionId);
 		const teamId = this.countPlayersInTeam(0) > this.countPlayersInTeam(1) ? 1 : 0;
 		const x = teamId == 0 ? 100 : GAME_WIDTH - 100;
-		const y = 200;
+		const y = 200 + (90 * this.countPlayersInTeam(teamId));
 
 		if (existingPlayer == null) {
 			this.players.set(playerOptions.userId, new Player({

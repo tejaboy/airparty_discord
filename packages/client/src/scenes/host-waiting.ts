@@ -42,8 +42,7 @@ export function createHostWaitingScene() {
                     k.rotate(0),
                     "waiting-ui"
                 ]);
-    
-                // player.teamId == 0 ? k.pos(100, 200 + (150 * indexTeam0++)) : k.pos(k.width() - 100, 200 + (150 * indexTeam1++)),
+                
                 // Add player avatar
                 playerSprite.add([
                     k.sprite("player_" + player.name),

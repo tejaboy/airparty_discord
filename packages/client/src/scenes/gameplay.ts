@@ -4,10 +4,12 @@ import { State } from "../../../server/src/entities/State";
 import { k } from "../main";
 import { getTeamColor } from "./host-waiting";
 import { GAME_WIDTH } from "../../../server/src/shared/Constants";
+import { GameObj, Vec2 } from "kaboom";
 
 export function createGameplayScene() {
     k.scene("gameplay", (room: Room<State>) => {
         let myPlayer: Player;
+        let playerObjects: { [key: string]: GameObj } = {};
 
         room.state.players.forEach((player, sessionId) => {
             if (player.sessionId == room.sessionId) {
@@ -45,6 +47,8 @@ export function createGameplayScene() {
                     playerSprite.pos.y += (player.y - playerSprite.pos.y) * 12 * k.dt();
                 }
             });
+
+            playerObjects[player.userId] = playerSprite;
         });
 
         /* MOVEMENT */
@@ -72,10 +76,17 @@ export function createGameplayScene() {
             room.send("movement", { value: value });
         }
 
-        // Add message event
+        // addMessage event
         room.onMessage("addMessage", (message) => {
             addMessage(message);
         })
+
+        // playerDeath event
+        room.onMessage("playerDeath", (userId) => {
+            let playerSprite: GameObj = playerObjects[userId];
+            playerSprite.destroy();
+            addExplosion(playerSprite.pos);
+        });
     });
 }
 
@@ -88,4 +99,22 @@ function addMessage(message: string) {
         k.lifespan(2),
         k.move(-90, 60),
     ])
+}
+
+function addExplosion(pos: Vec2, scale: number = 1) {
+    // k.addKaboom(pos);
+
+    const explosive = k.add([
+        k.sprite("explosion", {
+            anim: "explode"
+        }),
+        k.pos(pos),
+        k.anchor("center"),
+        k.scale(scale),
+        k.stay(),
+    ]);
+
+    explosive.onAnimEnd(() => {
+        k.destroy(explosive);
+    })
 }

@@ -60,12 +60,4 @@ export class Player extends Schema {
 		this.x = x;
 		this.y = y;
 	}
-
-	hurt(damage: number) {
-		this.health -= damage;
-
-		if (this.health < 0) {
-			this.health = 0;
-		}
-	}
 }

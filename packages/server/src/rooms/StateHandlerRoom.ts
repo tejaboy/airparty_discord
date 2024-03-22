@@ -1,5 +1,5 @@
 import {Room, Client} from 'colyseus';
-import {TPlayerOptions} from '../entities/Player';
+import {Player, TPlayerOptions} from '../entities/Player';
 import {State, IState} from '../entities/State';
 import { GAME_HEIGHT, GAME_WIDTH } from '../shared/Constants';
 
@@ -62,7 +62,7 @@ export class StateHandlerRoom extends Room<State> {
 	startGame() {
 		this.setSimulationInterval((deltaTime) => {
 			this.state.players.forEach((player, sessionId) => {
-				if (player.health == 0) {
+				if (player.health <= 0) {
 					return;
 				}
 
@@ -98,9 +98,17 @@ export class StateHandlerRoom extends Room<State> {
                 if (player.y > GAME_HEIGHT || player.y < 0) {
                     //killfeeds.push([undefined, serverPlayer.name]);
                 	this.broadcast("addMessage", `${player.name} crashed!`);
-                    player.hurt(100);
+                    this.damagePlayer(player, 100);
                 }
 			});
 		});
+	}
+
+	damagePlayer(player: Player, damage: number) {
+		player.health -= damage;
+
+		if (player.health <= 0) {
+			this.broadcast("playerDeath", player.userId);
+		}
 	}
 }

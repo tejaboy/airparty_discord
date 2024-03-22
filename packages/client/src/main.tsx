@@ -26,6 +26,19 @@ k.loadSprite("plane_1_Red", "src/images/plane_1_red.png");
 k.loadSprite("plane_2_Red", "src/images/plane_2_red.png");
 k.loadSprite("plane_3_Red", "src/images/plane_3_red.png");
 
+// Load explosion spritesheet
+k.loadSprite("explosion", "src/images/explosion.png", {
+	sliceX: 3,
+	sliceY: 3,
+	anims: {
+		explode: {
+			from: 0,
+			to: 8,
+			speed: 24
+		},
+	},
+});
+
 // Create all scenes
 createHostWaitingScene();
 createGameplayScene();

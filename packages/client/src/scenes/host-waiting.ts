@@ -8,7 +8,7 @@ export function createHostWaitingScene() {
     k.scene("host-waiting", (room: Room<State>) => {
         let myPlayer: Player;
 
-        room.onStateChange((state) => {
+        const stateChangeController = room.onStateChange((state) => {
             let indexTeam0 = 0;
             let indexTeam1 = 0;
     
@@ -74,6 +74,13 @@ export function createHostWaitingScene() {
             addButton(myPlayer.ready ? "UNREADY" : "READY", k.center(), "waiting-ui", (bg, text) => {
                 room.send('ready');
             });
+        });
+
+        // On start-game message
+        room.onMessage("start-game", () => {
+            stateChangeController.clear();
+            room.removeAllListeners();
+            k.go("gameplay");
         });
     });
 }

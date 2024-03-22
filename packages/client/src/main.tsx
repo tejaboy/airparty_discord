@@ -1,8 +1,8 @@
-import { Player } from '../../server/src/entities/Player';
 import { setUpDiscordSdk } from './helper/setUpDiscordSdk';
 import './index.css';
-import kaboom, { Vec2 } from 'kaboom'
+import kaboom from 'kaboom'
 import { createHostWaitingScene } from './scenes/host-waiting';
+import { createGameplayScene } from './scenes/gameplay';
 
 // Initialize Kaboom
 export const k = kaboom({
@@ -25,6 +25,7 @@ k.loadSprite("plane_3_Red", "src/images/plane_3_red.png");
 
 // Create all scenes
 createHostWaitingScene();
+createGameplayScene();
 
 setUpDiscordSdk().then(({avatarUri, name, client, room}) => {
 	text.text = "Set-up succes. Welcome, " + name + "!";

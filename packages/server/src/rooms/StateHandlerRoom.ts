@@ -19,6 +19,20 @@ export class StateHandlerRoom extends Room<State> {
 
 		this.onMessage('ready', (client, _data) => {
 			this.state.setPlayerReady(client.sessionId);
+
+			// Check if all players are ready, if not, set allReady to false
+			let allReady = true;
+			this.state.players.forEach((player, sessionId) => {
+				if (!player.ready) {
+					allReady = false;
+					return;
+				}
+			})
+
+			// If all players are ready, we send the start signal to all client
+			if (allReady) {
+				this.broadcast("start-game");
+			}
 		})
 	}
 

@@ -47,6 +47,7 @@ export function createGameplayScene() {
             });
         });
 
+        /* MOVEMENT */
         let currentMovement = 0;
         k.onKeyDown("w", () => {
             setMovement(1);
@@ -70,5 +71,21 @@ export function createGameplayScene() {
             currentMovement = value;
             room.send("movement", { value: value });
         }
+
+        // Add message event
+        room.onMessage("addMessage", (message) => {
+            addMessage(message);
+        })
     });
+}
+
+function addMessage(message: string) {
+    k.add([
+        k.text(message, { size: 48 }),
+        k.pos(k.width() / 2, k.height() * 0.15),
+        k.anchor("center"),
+        k.color(255, 120, 60),
+        k.lifespan(2),
+        k.move(-90, 60),
+    ])
 }

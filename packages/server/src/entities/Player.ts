@@ -45,6 +45,9 @@ export class Player extends Schema {
 	@type("number")
 	public movement: number = 0; // 0 == no move, 1 == move up, -1 == move down
 
+	@type("number")
+	public health: number = 8;
+
 	// Init
 	constructor({name, userId, avatarUri, sessionId, teamId, spriteId, x, y}: TPlayerOptions) {
 		super();
@@ -56,5 +59,13 @@ export class Player extends Schema {
 		this.spriteId = spriteId;
 		this.x = x;
 		this.y = y;
+	}
+
+	hurt(damage: number) {
+		this.health -= damage;
+
+		if (this.health < 0) {
+			this.health = 0;
+		}
 	}
 }

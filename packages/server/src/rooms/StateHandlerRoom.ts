@@ -62,6 +62,10 @@ export class StateHandlerRoom extends Room<State> {
 	startGame() {
 		this.setSimulationInterval((deltaTime) => {
 			this.state.players.forEach((player, sessionId) => {
+				if (player.health == 0) {
+					return;
+				}
+
 				// Update player angle based on movement value
 				const angleSpeed = 90;
 				if (player.movement !== 0) {
@@ -93,8 +97,8 @@ export class StateHandlerRoom extends Room<State> {
 				// When hit height or ground, lose the game
                 if (player.y > GAME_HEIGHT || player.y < 0) {
                     //killfeeds.push([undefined, serverPlayer.name]);
-                    //addMessage(`${serverPlayer.name} crashed!`);
-                    //playerSprite.hurt(100);
+                	this.broadcast("addMessage", `${player.name} crashed!`);
+                    player.hurt(100);
                 }
 			});
 		});

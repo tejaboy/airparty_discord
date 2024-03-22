@@ -32,6 +32,7 @@ export class StateHandlerRoom extends Room<State> {
 			// If all players are ready, we send the start signal to all client
 			if (allReady) {
 				this.broadcast("start-game");
+				this.startGame();
 			}
 		})
 	}
@@ -50,5 +51,17 @@ export class StateHandlerRoom extends Room<State> {
 
 	onDispose() {
 		console.log('Dispose StateHandlerRoom');
+	}
+
+	// Gameplay Loop
+	startGame() {
+		this.setSimulationInterval((deltaTime) => {
+			this.state.players.forEach((player, sessionId) => {
+				const speed = 300;
+
+				player.x += Math.cos(player.angle) * speed * (deltaTime / 1000);
+				player.y += Math.sin(player.angle) * speed * (deltaTime / 1000);
+			});
+		});
 	}
 }

@@ -36,13 +36,11 @@ export function createHostWaitingScene() {
                     // List of components, each offers a set of functionalities
                     k.sprite(`plane_${player.spriteId}_${getTeamColor(player.teamId)}`, { flipX: player.teamId != 0}),
                     k.pos(player.x, player.y),
-                    k.area(),
-                    k.health(8),
                     k.anchor("center"),
                     k.rotate(0),
                     "waiting-ui"
                 ]);
-                
+
                 // Add player avatar
                 playerSprite.add([
                     k.sprite("player_" + player.name),
@@ -80,7 +78,7 @@ export function createHostWaitingScene() {
         room.onMessage("start-game", () => {
             stateChangeController.clear();
             room.removeAllListeners();
-            k.go("gameplay");
+            k.go("gameplay", room);
         });
     });
 }

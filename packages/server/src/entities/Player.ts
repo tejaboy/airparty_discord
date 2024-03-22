@@ -39,6 +39,9 @@ export class Player extends Schema {
 	@type("number")
 	public y: number = 0;
 
+	@type("number")
+	public angle: number = 0;
+
 	// Init
 	constructor({name, userId, avatarUri, sessionId, teamId, spriteId, x, y}: TPlayerOptions) {
 		super();

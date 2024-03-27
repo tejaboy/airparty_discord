@@ -1,6 +1,6 @@
 import {Schema, MapSchema, type} from '@colyseus/schema';
 import {TPlayerOptions, Player} from './Player';
-import { GAME_WIDTH } from '../shared/Constants';
+import { GAME_HEIGHT, GAME_WIDTH } from '../shared/Constants';
 
 export interface IState {
 	roomName: string;
@@ -10,6 +10,8 @@ export interface IState {
 export class State extends Schema {
 	@type({map: Player})
 	players = new MapSchema<Player>();
+	team0Players = new Array<Player>();
+	team1Players = new Array<Player>();
 
 	@type('string')
 	public roomName: string;
@@ -34,18 +36,36 @@ export class State extends Schema {
 		const existingPlayer = Array.from(this.players.values()).find((p) => p.sessionId === sessionId);
 		const teamId = this.countPlayersInTeam(0) > this.countPlayersInTeam(1) ? 1 : 0;
 		const x = teamId == 0 ? 100 : GAME_WIDTH - 100;
-		const y = 200 + (90 * this.countPlayersInTeam(teamId));
+		const y = 0;
 
 		if (existingPlayer == null) {
-			this.players.set(playerOptions.userId, new Player({
+			const newPlayer = new Player({
 				...playerOptions,
 				sessionId,
 				teamId,
 				spriteId: Math.floor(Math.random() * 3) + 1,
 				x,
 				y
-			}));
+			});
+
+			this.players.set(playerOptions.userId, newPlayer);
+
+			if (teamId == 0) {
+				this.team0Players.push(newPlayer);
+				this.recalculatePlayerPosition(this.team0Players);
+			}
+			else {
+				this.team1Players.push(newPlayer);
+				this.recalculatePlayerPosition(this.team1Players);
+			}
 		}
+	}
+
+	recalculatePlayerPosition(teamPlayers: Array<Player>) {
+		const spawnPositions = this.calculateSpawnPositions(teamPlayers.length);
+		teamPlayers.forEach((player, index) => {
+			player.y = spawnPositions[index];
+		});
 	}
 
 	removePlayer(sessionId: string) {
@@ -98,5 +118,16 @@ export class State extends Schema {
 			}
 		}
 		return count;
+	}
+
+	calculateSpawnPositions(teamSize: number) {
+		const spawnPositions = [];
+		const spacing = GAME_HEIGHT / (teamSize + 1);
+		
+		for (let i = 0; i < teamSize; i++) {
+			spawnPositions.push(spacing * (i + 1));
+		}
+	
+		return spawnPositions;
 	}
 }

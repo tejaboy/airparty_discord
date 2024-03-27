@@ -1,7 +1,7 @@
 import {Room, Client} from 'colyseus';
 import {Player, TPlayerOptions} from '../entities/Player';
 import {State, IState} from '../entities/State';
-import { BULLET_INTERVAL, BULLET_SPEED, GAME_HEIGHT, GAME_WIDTH } from '../shared/Constants';
+import { BULLET_INTERVAL, BULLET_SPEED, GAME_HEIGHT, GAME_WIDTH, PLAYER_HEIGHT, PLAYER_WIDTH, PROJECTILE_HEIGHT, PROJECTILE_WIDTH } from '../shared/Constants';
 
 export class StateHandlerRoom extends Room<State> {
 	maxClients = 1000;
@@ -84,11 +84,11 @@ export class StateHandlerRoom extends Room<State> {
 				const nextX = Math.cos(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
 				const nextY = Math.sin(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
 				if (player.teamId == 0) {
-					player.x += nextX;
-					player.y += nextY;
+					//player.x += nextX;
+					//player.y += nextY;
 				} else {
-					player.x -= nextX;
-					player.y -= nextY;
+					//player.x -= nextX;
+					//player.y -= nextY;
 				}
 				
 
@@ -115,7 +115,7 @@ export class StateHandlerRoom extends Room<State> {
 						x: player.x,
 						y: player.y,
 						angle: player.teamId == 0 ? player.angle : (player.angle - 180) % 360,
-						targetTeamId: player.teamId == 0 ? "team1" : "team0",
+						targetTeamId: player.teamId == 0 ? 1 : 0,
 						owner: player.name,
 						id: "projectile#" + this.projectiles.length + "-" + Math.random().toString(16).slice(2)
 					}
@@ -135,6 +135,22 @@ export class StateHandlerRoom extends Room<State> {
 					this.broadcast("removeProjectile", projectile.id);
 					return false; // Remove this projectile from array
 				}
+
+				// Projectile hit player
+				this.state.players.forEach((player, sessionId) => {
+					if (projectile.targetTeamId != player.teamId) return;
+
+					// Check for collision between projectile and player
+					if (projectile.x < player.x + PLAYER_WIDTH &&
+						projectile.x + PROJECTILE_WIDTH > player.x &&
+						projectile.y < player.y + PLAYER_HEIGHT &&
+						projectile.y + PROJECTILE_HEIGHT > player.y) {
+						
+						console.log("Collision detected with player:", player.name);
+						this.broadcast("removeProjectile", projectile.id);
+						return false;
+					}
+				});
 				
 				return true; // Keep this projectile in the array
 			});
@@ -158,7 +174,7 @@ interface Projectile {
     x: number;
     y: number;
     angle: number;
-    targetTeamId: string;
+    targetTeamId: number;
     owner: string;
 	id: string;
 }

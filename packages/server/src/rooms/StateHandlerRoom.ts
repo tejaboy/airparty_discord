@@ -84,13 +84,12 @@ export class StateHandlerRoom extends Room<State> {
 				const nextX = Math.cos(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
 				const nextY = Math.sin(player.angle * Math.PI / 180) * speed * (deltaTime / 1000);
 				if (player.teamId == 0) {
-					//player.x += nextX;
-					//player.y += nextY;
+					player.x += nextX;
+					player.y += nextY;
 				} else {
-					//player.x -= nextX;
-					//player.y -= nextY;
+					player.x -= nextX;
+					player.y -= nextY;
 				}
-				
 
 				/* BOUNDS */
                 // When reaches end, restart at 0
@@ -141,10 +140,22 @@ export class StateHandlerRoom extends Room<State> {
 					if (projectile.targetTeamId != player.teamId) return;
 
 					// Check for collision between projectile and player
-					if (projectile.x < player.x + PLAYER_WIDTH &&
-						projectile.x + PROJECTILE_WIDTH > player.x &&
-						projectile.y < player.y + PLAYER_HEIGHT &&
-						projectile.y + PROJECTILE_HEIGHT > player.y) {
+					const projectileCenterX = projectile.x + PROJECTILE_WIDTH / 2;
+					const projectileCenterY = projectile.y + PROJECTILE_HEIGHT / 2;
+
+					// Calculate center position of player
+					const playerCenterX = player.x + PLAYER_WIDTH / 2;
+					const playerCenterY = player.y + PLAYER_HEIGHT / 2;
+
+					// Calculate half-width and half-height of player and projectile
+					const halfPlayerWidth = PLAYER_WIDTH / 2;
+					const halfPlayerHeight = PLAYER_HEIGHT / 2;
+					const halfProjectileWidth = PROJECTILE_WIDTH / 2;
+					const halfProjectileHeight = PROJECTILE_HEIGHT / 2;
+
+					// Check for collision between projectile and player
+					if (Math.abs(projectileCenterX - playerCenterX) < halfPlayerWidth + halfProjectileWidth &&
+						Math.abs(projectileCenterY - playerCenterY) < halfPlayerHeight + halfProjectileHeight) {
 						
 						console.log("Collision detected with player:", player.name);
 						this.broadcast("removeProjectile", projectile.id);

@@ -3,7 +3,7 @@ import { Player } from "../../../server/src/entities/Player";
 import { State } from "../../../server/src/entities/State";
 import { k } from "../main";
 import { getTeamColor } from "./host-waiting";
-import { GAME_WIDTH } from "../../../server/src/shared/Constants";
+import { BULLET_SPEED, GAME_WIDTH } from "../../../server/src/shared/Constants";
 import { GameObj, Vec2 } from "kaboom";
 
 export function createGameplayScene() {
@@ -113,8 +113,18 @@ export function createGameplayScene() {
                 message.y,
                 message.angle,
                 message.targetTeamId,
-                message.ownerName
+                message.ownerName,
+                message.id
             );
+        });
+
+        // removeProjectile event
+        room.onMessage("removeProjectile", (projectileId) => {
+            k.get(projectileId).forEach((projectile) => {
+                addExplosion(projectile.pos);
+            });
+
+            k.destroyAll(projectileId);
         });
     });
 }
@@ -148,8 +158,7 @@ function addExplosion(pos: Vec2, scale: number = 1) {
     })
 }
 
-function createProjectile(x: number, y: number, angle: number, targetTag: string, ownerName: string) {
-    const BULLET_SPEED = 2200;
+function createProjectile(x: number, y: number, angle: number, targetTag: string, ownerName: string, id: string) {
     const projectile = k.add([
 		k.sprite("bullet1"),
 		k.pos(x, y),
@@ -157,7 +166,7 @@ function createProjectile(x: number, y: number, angle: number, targetTag: string
 		k.area(),
 		k.move(angle, BULLET_SPEED),
 		k.rotate(angle),
-		k.offscreen({ destroy: true }),
-        k.z(1)
+        k.z(1),
+        id
 	]);
 }

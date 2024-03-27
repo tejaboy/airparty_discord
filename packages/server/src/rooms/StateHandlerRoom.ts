@@ -1,10 +1,11 @@
 import {Room, Client} from 'colyseus';
 import {Player, TPlayerOptions} from '../entities/Player';
 import {State, IState} from '../entities/State';
-import { BULLET_INTERVAL, GAME_HEIGHT, GAME_WIDTH } from '../shared/Constants';
+import { BULLET_INTERVAL, BULLET_SPEED, GAME_HEIGHT, GAME_WIDTH } from '../shared/Constants';
 
 export class StateHandlerRoom extends Room<State> {
 	maxClients = 1000;
+	private projectiles: Projectile[] = [];
 
 	onCreate(options: IState) {
 		this.setState(new State(options));
@@ -65,6 +66,7 @@ export class StateHandlerRoom extends Room<State> {
 	// Gameplay Loop
 	startGame() {
 		this.setSimulationInterval((deltaTime) => {
+			/* Player Loop */
 			this.state.players.forEach((player, sessionId) => {
 				if (player.health <= 0) {
 					return;
@@ -109,14 +111,31 @@ export class StateHandlerRoom extends Room<State> {
 				player.bulletTimer += deltaTime / 1000;
 				if (player.isShooting && player.bulletTimer > BULLET_INTERVAL && player.bulletLeft > 0) {
 					player.bulletTimer = 0;
-					this.broadcast("createProjectile", {
+					let projectile: Projectile = {
 						x: player.x,
 						y: player.y,
 						angle: player.teamId == 0 ? player.angle : (player.angle - 180) % 360,
 						targetTeamId: player.teamId == 0 ? "team1" : "team0",
-						owner: player.name
-					});
+						owner: player.name,
+						id: "projectile#" + this.projectiles.length + "-" + Math.random().toString(16).slice(2)
+					}
+
+					this.broadcast("createProjectile", projectile);
+					this.createProjectileOnServer(projectile);
 				}
+			});
+
+			/* Projectile Loop */
+			this.projectiles = this.projectiles.filter((projectile) => {
+				projectile.x += Math.cos(projectile.angle * Math.PI / 180) * BULLET_SPEED * (deltaTime / 1000);
+				projectile.y += Math.sin(projectile.angle * Math.PI / 180) * BULLET_SPEED * (deltaTime / 1000);
+			
+				if (projectile.x > GAME_WIDTH) {
+					this.broadcast("removeProjectile", projectile.id);
+					return false; // Remove this projectile from array
+				}
+				
+				return true; // Keep this projectile in the array
 			});
 		});
 	}
@@ -128,4 +147,17 @@ export class StateHandlerRoom extends Room<State> {
 			this.broadcast("playerDeath", player.userId);
 		}
 	}
+
+	createProjectileOnServer(projectile: Projectile) {
+		this.projectiles.push(projectile);
+	}
+}
+
+interface Projectile {
+    x: number;
+    y: number;
+    angle: number;
+    targetTeamId: string;
+    owner: string;
+	id: string;
 }

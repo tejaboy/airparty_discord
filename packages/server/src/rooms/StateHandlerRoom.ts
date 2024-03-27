@@ -136,20 +136,22 @@ export class StateHandlerRoom extends Room<State> {
 				}
 
 				// Projectile hit player
+				let isProjectileAlive = true;
 				this.state.players.forEach((player, sessionId) => {
+					if (isProjectileAlive == false) return;
 					if (player.health <= 0) return;
 					if (projectile.targetTeamId != player.teamId) return;
 
 					// Check for collision between projectile and player
 					if (this.isCollidWithPlayer(projectile, player)) {
 						this.broadcast("removeProjectile", projectile.id);
-
 						this.damagePlayer(player, 1);
-						return false;
+						isProjectileAlive = false;
+						return;
 					}
 				});
 				
-				return true; // Keep this projectile in the array
+				return isProjectileAlive; // Keep this projectile in the array, if not hit any player yet
 			});
 		});
 	}

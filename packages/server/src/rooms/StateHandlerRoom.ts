@@ -147,6 +147,11 @@ export class StateHandlerRoom extends Room<State> {
 						this.broadcast("removeProjectile", projectile.id);
 						this.damagePlayer(player, 1);
 						isProjectileAlive = false;
+
+						if (player.health <= 0) {
+							this.broadcast("addMessage", `${projectile.owner} shot down ${player.name}!`);
+						}
+
 						return;
 					}
 				});

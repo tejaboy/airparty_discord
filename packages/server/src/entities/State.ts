@@ -10,16 +10,14 @@ export interface IState {
 export class State extends Schema {
 	@type({map: Player})
 	players = new MapSchema<Player>();
-	team0Players = new Array<Player>();
-	team1Players = new Array<Player>();
+	team0Players = new Array<Player>(); // serverAttribute
+	team1Players = new Array<Player>(); // serverAttribute
 
 	@type('string')
 	public roomName: string;
 
 	@type('string')
 	public channelId: string;
-
-	serverAttribute = 'this attribute wont be sent to the client-side';
 
 	// Init
 	constructor(attributes: IState) {

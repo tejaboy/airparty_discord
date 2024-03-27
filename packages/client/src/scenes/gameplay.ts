@@ -139,13 +139,13 @@ export function createGameplayScene() {
     });
 }
 
-function addMessage(message: string) {
+export function addMessage(message: string, lifespan: number = 2) {
     k.add([
         k.text(message, { size: 48 }),
         k.pos(k.width() / 2, k.height() * 0.15),
         k.anchor("center"),
         k.color(255, 120, 60),
-        k.lifespan(2),
+        k.lifespan(lifespan),
         k.move(-90, 60),
     ])
 }

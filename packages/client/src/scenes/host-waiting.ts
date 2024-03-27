@@ -3,6 +3,7 @@ import { Player } from "../../../server/src/entities/Player";
 import { State } from "../../../server/src/entities/State";
 import { k } from "../main";
 import { addButton } from "../helper/addButton";
+import { addMessage } from "./gameplay";
 
 export function createHostWaitingScene() {
     k.scene("host-waiting", (room: Room<State>) => {
@@ -74,6 +75,11 @@ export function createHostWaitingScene() {
             });
         });
 
+        // On start-game-countdown message
+        room.onMessage("countdown", (message) => {
+            addMessage(message, 1);
+        });
+        
         // On start-game message
         room.onMessage("start-game", () => {
             stateChangeController.clear();

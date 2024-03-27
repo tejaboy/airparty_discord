@@ -1,11 +1,14 @@
 import {Room, Client} from 'colyseus';
 import {Player, TPlayerOptions} from '../entities/Player';
 import {State, IState} from '../entities/State';
-import { BULLET_INTERVAL, BULLET_SPEED, GAME_HEIGHT, GAME_WIDTH, PLAYER_HEIGHT, PLAYER_WIDTH, PROJECTILE_HEIGHT, PROJECTILE_WIDTH } from '../shared/Constants';
+import { BULLET_INTERVAL, BULLET_SPEED, GAME_HEIGHT, GAME_WIDTH, LOBBY_COUNTDOWN, PLAYER_HEIGHT, PLAYER_WIDTH, PROJECTILE_HEIGHT, PROJECTILE_WIDTH } from '../shared/Constants';
 
 export class StateHandlerRoom extends Room<State> {
 	maxClients = 1000;
 	private projectiles: Projectile[] = [];
+	private startingGame: boolean = false;
+	private lobbyCountdown: number = 0;
+	private gameStarted: boolean = false;
 
 	onCreate(options: IState) {
 		this.setState(new State(options));
@@ -27,14 +30,15 @@ export class StateHandlerRoom extends Room<State> {
 			this.state.players.forEach((player, sessionId) => {
 				if (!player.ready) {
 					allReady = false;
+					this.startingGame = false;
 					return;
 				}
 			})
 
 			// If all players are ready, we send the start signal to all client
 			if (allReady) {
-				this.broadcast("start-game");
-				this.startGame();
+				this.startingGame = true;
+				this.lobbyCountdown = LOBBY_COUNTDOWN + 1;
 			}
 		});
 
@@ -45,6 +49,17 @@ export class StateHandlerRoom extends Room<State> {
 		this.onMessage('shooting', (client, isShooting) => {
 			this.state.setShooting(client.sessionId, isShooting);
 		});
+
+		this.setSimulationInterval((deltaTime) => {
+			if (this.startingGame && !this.gameStarted) {
+				this.broadcast("countdown", "Gaming starting in " + --this.lobbyCountdown);
+
+				if (this.lobbyCountdown == 0) {
+					this.broadcast("start-game");
+					this.startGame();
+				}
+			}
+		}, 1000);
 	}
 
 	onAuth(_client: any, _options: any, _req: any) {
@@ -52,6 +67,7 @@ export class StateHandlerRoom extends Room<State> {
 	}
 
 	onJoin(client: Client, options: TPlayerOptions) {
+		this.startingGame = false;
 		this.state.createPlayer(client.sessionId, options);
 	}
 
@@ -65,6 +81,7 @@ export class StateHandlerRoom extends Room<State> {
 
 	// Gameplay Loop
 	startGame() {
+		this.gameStarted = true;
 		this.setSimulationInterval((deltaTime) => {
 			/* Player Loop */
 			this.state.players.forEach((player, sessionId) => {

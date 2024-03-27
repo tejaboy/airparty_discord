@@ -130,7 +130,8 @@ export class StateHandlerRoom extends Room<State> {
 				projectile.x += Math.cos(projectile.angle * Math.PI / 180) * BULLET_SPEED * (deltaTime / 1000);
 				projectile.y += Math.sin(projectile.angle * Math.PI / 180) * BULLET_SPEED * (deltaTime / 1000);
 			
-				if (projectile.x > GAME_WIDTH) {
+				// Projectile bounds
+				if (projectile.x > GAME_WIDTH || projectile.x < 0 || projectile.y < 0 || projectile.y > GAME_HEIGHT) {
 					this.broadcast("removeProjectile", projectile.id);
 					return false; // Remove this projectile from array
 				}

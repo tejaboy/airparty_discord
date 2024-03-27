@@ -102,8 +102,13 @@ export function createGameplayScene() {
         // playerDeath event
         room.onMessage("playerDeath", (userId) => {
             let playerSprite: GameObj = playerObjects[userId];
-            playerSprite.destroy();
             addExplosion(playerSprite.pos);
+            playerSprite.destroy();
+        });
+
+        room.onMessage("playerHurt", (userId) => {
+            let playerSprite: GameObj = playerObjects[userId];
+            addExplosion(playerSprite.pos, 0.5);
         });
 
         // createProjectile event
@@ -118,12 +123,17 @@ export function createGameplayScene() {
             );
         });
 
-        // removeProjectile event
-        room.onMessage("removeProjectile", (projectileId) => {
+        // removeProjectileFromBound event - on hit bound
+        room.onMessage("removeProjectileFromBound", (projectileId) => {
             k.get(projectileId).forEach((projectile) => {
                 addExplosion(projectile.pos);
             });
 
+            k.destroyAll(projectileId);
+        });
+        
+        // removeProjectile event - on hit player
+        room.onMessage("removeProjectile", (projectileId) => {
             k.destroyAll(projectileId);
         });
     });

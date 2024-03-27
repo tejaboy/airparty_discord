@@ -131,7 +131,7 @@ export class StateHandlerRoom extends Room<State> {
 			
 				// Projectile bounds
 				if (projectile.x > GAME_WIDTH || projectile.x < 0 || projectile.y < 0 || projectile.y > GAME_HEIGHT) {
-					this.broadcast("removeProjectile", projectile.id);
+					this.broadcast("removeProjectileFromBound", projectile.id);
 					return false; // Remove this projectile from array
 				}
 
@@ -140,25 +140,10 @@ export class StateHandlerRoom extends Room<State> {
 					if (projectile.targetTeamId != player.teamId) return;
 
 					// Check for collision between projectile and player
-					const projectileCenterX = projectile.x + PROJECTILE_WIDTH / 2;
-					const projectileCenterY = projectile.y + PROJECTILE_HEIGHT / 2;
-
-					// Calculate center position of player
-					const playerCenterX = player.x + PLAYER_WIDTH / 2;
-					const playerCenterY = player.y + PLAYER_HEIGHT / 2;
-
-					// Calculate half-width and half-height of player and projectile
-					const halfPlayerWidth = PLAYER_WIDTH / 2;
-					const halfPlayerHeight = PLAYER_HEIGHT / 2;
-					const halfProjectileWidth = PROJECTILE_WIDTH / 2;
-					const halfProjectileHeight = PROJECTILE_HEIGHT / 2;
-
-					// Check for collision between projectile and player
-					if (Math.abs(projectileCenterX - playerCenterX) < halfPlayerWidth + halfProjectileWidth &&
-						Math.abs(projectileCenterY - playerCenterY) < halfPlayerHeight + halfProjectileHeight) {
-						
-						console.log("Collision detected with player:", player.name);
+					if (this.isCollidWithPlayer(projectile, player)) {
 						this.broadcast("removeProjectile", projectile.id);
+
+						this.damagePlayer(player, 1);
 						return false;
 					}
 				});
@@ -170,6 +155,7 @@ export class StateHandlerRoom extends Room<State> {
 
 	damagePlayer(player: Player, damage: number) {
 		player.health -= damage;
+		this.broadcast("playerHurt", player.userId);
 
 		if (player.health <= 0) {
 			this.broadcast("playerDeath", player.userId);
@@ -178,6 +164,26 @@ export class StateHandlerRoom extends Room<State> {
 
 	createProjectileOnServer(projectile: Projectile) {
 		this.projectiles.push(projectile);
+	}
+
+	isCollidWithPlayer(projectile: Projectile, player: Player) {
+		// Check for collision between projectile and player
+		const projectileCenterX = projectile.x + PROJECTILE_WIDTH / 2;
+		const projectileCenterY = projectile.y + PROJECTILE_HEIGHT / 2;
+
+		// Calculate center position of player
+		const playerCenterX = player.x + PLAYER_WIDTH / 2;
+		const playerCenterY = player.y + PLAYER_HEIGHT / 2;
+
+		// Calculate half-width and half-height of player and projectile
+		const halfPlayerWidth = PLAYER_WIDTH / 2;
+		const halfPlayerHeight = PLAYER_HEIGHT / 2;
+		const halfProjectileWidth = PROJECTILE_WIDTH / 2;
+		const halfProjectileHeight = PROJECTILE_HEIGHT / 2;
+
+		// Check for collision between projectile and player
+		return (Math.abs(projectileCenterX - playerCenterX) < halfPlayerWidth + halfProjectileWidth &&
+			Math.abs(projectileCenterY - playerCenterY) < halfPlayerHeight + halfProjectileHeight);
 	}
 }
 

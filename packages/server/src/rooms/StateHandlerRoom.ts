@@ -137,6 +137,7 @@ export class StateHandlerRoom extends Room<State> {
 
 				// Projectile hit player
 				this.state.players.forEach((player, sessionId) => {
+					if (player.health <= 0) return;
 					if (projectile.targetTeamId != player.teamId) return;
 
 					// Check for collision between projectile and player

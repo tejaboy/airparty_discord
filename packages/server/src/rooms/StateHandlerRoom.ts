@@ -175,7 +175,7 @@ export class StateHandlerRoom extends Room<State> {
 				
 				return isProjectileAlive; // Keep this projectile in the array, if not hit any player yet
 			});
-		});
+		}, 10);
 	}
 
 	damagePlayer(player: Player, damage: number) {

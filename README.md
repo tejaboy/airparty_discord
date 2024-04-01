@@ -1,15 +1,15 @@
-# React Colyseus Example
+# Air Party - Discord Activity Example
 
-![Screenshot of the react colyseus example running](/assets/example-application.gif)
+![Screenshot of the react colyseus example running](/preview.gif)
 
 This repo is an example built on top of two javascript frameworks
 
-1. [ReactJS](https://reactjs.org/) - A frontend javascript UI framework
+1. [KaboomJS](https://kaboomjs.com/) - A javascript game engine
 2. [Colyseus](https://www.colyseus.io/) - A full-stack state-management library
 
 ## Client architecture
 
-The client (aka front-end) is using [ViteJS](https://vitejs.dev/)'s React Typescript starter project. Vite has great starter projects in [many common javascript frameworks](https://vitejs.dev/guide/#trying-vite-online). All of these projects use the same config setup, which means that if you prefer VanillaJS, Svelte, etc... you can swap frameworks and still get the following:
+The client (aka front-end) is using [ViteJS](https://vitejs.dev/)'s React Typescript starter project. Refactored to replace the React with Kaboom.
 
 - Fast typescript bundling with hot-module-reloading
 - Identical configuration API
@@ -41,21 +41,22 @@ CLIENT_SECRET=PASTE_OAUTH2_CLIENT_SECRET_HERE
 ## Running your app locally
 
 As described [here](https://discord.com/developers/docs/activities/building-an-activity#step-4-running-your-app-locally-in-discord), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
-To run your app locally, run the following from this directory (/examples/react-colyseus)
+To run your app locally, run the following from this directory.
 
 ```
-pnpm install # only need to run this the first time
-pnpm dev
-pnpm tunnel # from another terminal
+npm install # only need to run this the first time
+npm run dev
+cloudflared tunnel --url http://localhost:3000 # from another terminal
 ```
 
 Be sure to complete all the steps listed [here](https://discord.com/developers/docs/activities/building-an-activity) to ensure your development setup is working as expected.
 
 ## Where do you go from here?
 
-This basic example will render users' avatars and show a green circle around anyone who is talking. It will spin up one "room" per Discord voice channel. It's a great starting point for your app, whether you're planning to stay in "react-land" or planning to use Unity / Cocos / etc...
+This basic project will create a 2D plane-based fighting game. You may look at (/packages/server/room/StateHandlerRoom.ts) for the back-end logic.
+This project feature multiple Kaboom scene. It is located at (/packages/clieent/scenes/*). This is how we create new "page" for the game.
 
-For more resources on 3rd party Game Engine SDKs for colyseus go [here](https://github.com/colyseus/colyseus#%EF%B8%8F-official-client-integration)
+For more resources on Kaboom, please go [here](https://kaboomjs.com).
 
 ## Common patterns with Colyseus
 

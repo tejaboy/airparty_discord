@@ -1,6 +1,6 @@
 import { Room } from "colyseus.js";
 import { State } from "../../../server/src/entities/State";
-import { k } from "../main";
+import { k } from "../App";
 import { getTeamColor } from "./host-waiting";
 import { GAME_OVER_TIMER } from "../../../server/src/shared/Constants";
 

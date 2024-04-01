@@ -1,5 +1,5 @@
 import { GameObj, Vec2 } from "kaboom";
-import { k } from "../main";
+import { k } from "../App";
 
 export function addButton(txt: string, position: Vec2, tag: string, f: (bg: GameObj, text: GameObj) => void) {
     const bg = k.add([

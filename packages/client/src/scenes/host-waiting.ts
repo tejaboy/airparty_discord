@@ -1,7 +1,7 @@
 import { Room } from "colyseus.js";
 import { Player } from "../../../server/src/entities/Player";
 import { State } from "../../../server/src/entities/State";
-import { k } from "../main";
+import { k } from "../App";
 import { addButton } from "../helper/addButton";
 import { addMessage } from "./gameplay";
 

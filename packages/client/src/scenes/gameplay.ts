@@ -1,7 +1,7 @@
 import { Room } from "colyseus.js";
 import { Player } from "../../../server/src/entities/Player";
 import { State } from "../../../server/src/entities/State";
-import { k } from "../main";
+import { k } from "../App";
 import { getTeamColor } from "./host-waiting";
 import { BULLET_SPEED, GAME_WIDTH } from "../../../server/src/shared/Constants";
 import { GameObj, Vec2 } from "kaboom";

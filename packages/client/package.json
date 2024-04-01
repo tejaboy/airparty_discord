@@ -12,6 +12,7 @@
     "colyseus.js": "^0.14.13",
     "eslint": "^8.18.0",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "kaboom": "^3000.1.17",
     "type-fest": "^4.8.3"
   },
   "devDependencies": {

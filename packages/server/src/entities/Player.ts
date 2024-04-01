@@ -1,7 +1,7 @@
 import {Schema, type} from '@colyseus/schema';
 import { BULLET_INTERVAL, BULLET_MAG_SIZE, PLAYER_INITIAL_HEALTH } from '../shared/Constants';
 
-export type TPlayerOptions = Pick<Player, 'sessionId' | 'userId' | 'name' | 'avatarUri' | 'talking' | 'spriteId' | 'teamId' | 'x' | 'y'>;
+export type TPlayerOptions = Pick<Player, 'sessionId' | 'userId' | 'name' | 'avatarUri' | 'spriteId' | 'teamId' | 'x' | 'y'>;
 
 export class Player extends Schema {
 	@type('string')
@@ -15,9 +15,6 @@ export class Player extends Schema {
 
 	@type('string')
 	public name: string;
-
-	@type('boolean')
-	public talking: boolean = false;
 
 	@type("boolean")
 	public ready: boolean = false;

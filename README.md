@@ -7,7 +7,7 @@ This repo is an example built on top of two javascript frameworks
 1. [KaboomJS](https://kaboomjs.com/) - A javascript game engine
 2. [Colyseus](https://www.colyseus.io/) - A full-stack state-management library
 
-This repo is lossy based on the (react-colyseus)[https://github.com/discord/embedded-app-sdk/tree/main/examples/react-colyseus] example from Discord.
+This repo is based from the [react-colyseus](https://github.com/discord/embedded-app-sdk/tree/main/examples/react-colyseus) example from Discord.
 
 ## Client architecture
 
@@ -80,3 +80,9 @@ Per the [ViteJS docs](https://vitejs.dev/guide/env-and-mode.html#env-files)
 VITE_CLIENT_ID=123456789012345678
 CLIENT_SECRET=abcdefghijklmnopqrstuvwxyzabcdef
 ```
+
+## Asset Pack
+
+This game extensively uses the open-source Plane asset pack from [GameDeveloperStudio](https://www.gamedeveloperstudio.com/).
+
+Please visit this [page](https://www.gamedeveloperstudio.com/graphics/viewgraphic.php?page-name=Plane-game-complete-2d-game-asset-pack&item=135r4l654k919t1p2c) for detailed information about this asset pack. Thanks Robert from GameDeveloperStudio for open-sourcing this amazing pack.

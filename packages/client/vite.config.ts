@@ -1,5 +1,4 @@
 import {defineConfig} from 'vite';
-import react from '@vitejs/plugin-react';
 
 // NOTE: building for prod will not work with a linked package
 // You should install directly from the repo in order to make the build work
@@ -8,7 +7,7 @@ import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [],
   envDir: '../../',
   server: {
     proxy: {

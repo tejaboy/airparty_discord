@@ -39,7 +39,7 @@ export function createGameplayScene() {
                 playerSprite.angle = playerSprite.angle + shortestAngle * 12 * k.dt();
 
                 // Lerp position - if distance is too far, then we change immediately (maybe bound?)
-                if (player.x == 0 || player.x == GAME_WIDTH) {
+                if (player.x <= 1.2 || player.x >= GAME_WIDTH - 1.2) {
                     playerSprite.pos.x = player.x;
                     playerSprite.pos.y = player.y;
                 } else {

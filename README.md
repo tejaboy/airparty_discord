@@ -53,175 +53,18 @@ Be sure to complete all the steps listed [here](https://discord.com/developers/d
 
 ## Where do you go from here?
 
-This basic project will create a 2D plane-based fighting game. You may look at [/packages/server/room/StateHandlerRoom.ts](/packages/server/room/StateHandlerRoom.ts) for the back-end logic.
+This basic project will create a 2D plane-based fighting game. You may look at [/packages/server/src/room/StateHandlerRoom.ts](/packages/server/src/room/StateHandlerRoom.ts) for the back-end code.
 This project feature multiple Kaboom scene. It is located at (/packages/clieent/scenes/*). This is how we create new "page" for the game.
 
 For more resources on Kaboom, please go [here](https://kaboomjs.com).
-
-## Common patterns with Colyseus
-
-### Expanding state
-
-Let's say you wanted to add position (x, y) to each player, and allow them to move. This requires changes across the front-end and back-end. Here's an example of how to do that:
-
-- Extend `Player.ts`' schema to include x and y as numbers
-
-```diff
---- a/examples/react-colyseus/packages/server/src/entities/Player.ts
-+++ b/examples/react-colyseus/packages/server/src/entities/Player.ts
-@@ -1,6 +1,6 @@
- import {Schema, type} from '@colyseus/schema';
-
--export type TPlayerOptions = Pick<Player, 'sessionId' | 'userId' | 'name' | 'avatarUri' | 'talking'>;
-+export type TPlayerOptions = Pick<Player, 'sessionId' | 'userId' | 'name' | 'avatarUri' | 'talking' | 'x' | 'y'>;
-
- export class Player extends Schema {
-   @type('string')
-@@ -18,6 +18,12 @@ export class Player extends Schema {
-   @type('boolean')
-   public talking: boolean = false;
-
-+  @type('number')
-+  public x: number;
-+
-+  @type('number')
-+  public y: number;
-+
-   // Init
-   constructor({name, userId, avatarUri, sessionId}: TPlayerOptions) {
-     super();
-@@ -25,5 +31,7 @@ export class Player extends Schema {
-     this.avatarUri = avatarUri;
-     this.name = name;
-     this.sessionId = sessionId;
-+    this.x = Math.round(Math.random() * 1000);
-+    this.y = Math.round(Math.random() * 1000);
-   }
- }
-```
-
-- Add a keyboard event listener which will send "move" commands to the server when arrow keys are pressed
-
-```diff
---- a/examples/react-colyseus/packages/client/src/components/VoiceChannelActivity.tsx
-+++ b/examples/react-colyseus/packages/client/src/components/VoiceChannelActivity.tsx
-@@ -2,9 +2,41 @@ import * as React from 'react';
- import {Player} from './Player';
- import {usePlayers} from '../hooks/usePlayers';
- import './VoiceChannelActivity.css';
-+import {useAuthenticatedContext} from '../hooks/useAuthenticatedContext';
-
- export function VoiceChannelActivity() {
-   const players = usePlayers();
-+  const {room} = useAuthenticatedContext();
-+
-+  React.useEffect(() => {
-+    function handleKeyDown(ev: KeyboardEvent) {
-+      switch (ev.key) {
-+        case 'ArrowUp':
-+        case 'KeyW':
-+          room.send('move', {x: 0, y: 1});
-+          break;
-+        case 'ArrowDown':
-+        case 'KeyS':
-+          room.send('move', {x: 0, y: -1});
-+          break;
-+        case 'ArrowLeft':
-+        case 'KeyA':
-+          room.send('move', {x: -1, y: 0});
-+          break;
-+        case 'ArrowRight':
-+        case 'KeyD':
-+          room.send('move', {x: 1, y: 0});
-+          break;
-+        default:
-+          break;
-+      }
-+    }
-+
-+    document.addEventListener('keydown', handleKeyDown);
-+    return () => {
-+      document.removeEventListener('keydown', handleKeyDown);
-+    };
-+  }, [room]);
-
-   return (
-     <div className="voice__channel__container">
-```
-
-- Create an event listener on `StateHandlerRoom.ts` to handle "move" events coming from clients
-
-```diff
---- a/examples/react-colyseus/packages/server/src/rooms/StateHandlerRoom.ts
-+++ b/examples/react-colyseus/packages/server/src/rooms/StateHandlerRoom.ts
-@@ -16,6 +16,10 @@ export class StateHandlerRoom extends Room<State> {
-     this.onMessage('stopTalking', (client, _data) => {
-       this.state.stopTalking(client.sessionId);
-     });
-+
-+    this.onMessage('move', (client, data) => {
-+      this.state.movePlayer(client.sessionId, data);
-+    });
-   }
-
-   onAuth(_client: any, _options: any, _req: any) {
-```
-
-- Create a command to allow moving a player in `State.ts`
-
-```diff
---- a/examples/react-colyseus/packages/server/src/entities/State.ts
-+++ b/examples/react-colyseus/packages/server/src/entities/State.ts
-@@ -56,4 +56,15 @@ export class State extends Schema {
-       player.talking = false;
-     }
-   }
-+
-+  movePlayer(sessionId: string, movement: {x: number; y: number}) {
-+    const player = this._getPlayer(sessionId);
-+    if (player != null) {
-+      if (movement.x) {
-+        player.x += movement.x;
-+      } else if (movement.y) {
-+        player.y += movement.y;
-+      }
-+    }
-+  }
- }
-```
-
-- Update the UI to consume the stateful updates to each player
-
-```diff
---- a/examples/react-colyseus/packages/client/src/components/Player.tsx
-+++ b/examples/react-colyseus/packages/client/src/components/Player.tsx
-@@ -2,13 +2,15 @@ import * as React from 'react';
- import {TPlayerOptions} from 'server/src/entities/Player';
- import './Player.css';
-
--export function Player({avatarUri, name, talking}: TPlayerOptions) {
-+export function Player({avatarUri, name, talking, x, y}: TPlayerOptions) {
-   return (
-     <div className="player__container">
-       <div className={`player__avatar ${talking ? 'player__avatar__talking' : ''}`}>
-         <img className="player__avatar__img" src={avatarUri} width="100%" height="100%" />
-       </div>
--      <div>{name}</div>
-+      <div>
-+        {x}, {y}, {name}
-+      </div>
-     </div>
-   );
- }
-```
 
 ### Adding a new environment variable
 
 In order to add new environment variables, you will need to do the following:
 
 1. Add the environment key and value to `.env`
-2. Add the key to [/examples/react-colyseus/packages/client/src/vite-env.d.ts](/examples/react-colyseus/packages/client/src/vite-env.d.ts)
-3. Add the key to [/examples/react-colyseus/packages/server/environment.d.ts](/examples/react-colyseus/packages/server/environment.d.ts)
+2. Add the key to [/packages/client/src/vite-env.d.ts](/packages/client/src/vite-env.d.ts)
+3. Add the key to [/packages/server/environment.d.ts](/packages/server/environment.d.ts)
 
 This will ensure that you have type safety in your client and server code when consuming environment variables
 

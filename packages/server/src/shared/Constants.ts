@@ -10,3 +10,4 @@ export const PROJECTILE_WIDTH = 50;
 export const PROJECTILE_HEIGHT = 27;
 export const LOBBY_COUNTDOWN = 5;
 export const PLAYER_INITIAL_HEALTH = 5;
+export const GAME_OVER_TIMER = 5;

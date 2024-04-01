@@ -2,6 +2,7 @@ import { Room } from "colyseus.js";
 import { State } from "../../../server/src/entities/State";
 import { k } from "../main";
 import { getTeamColor } from "./host-waiting";
+import { GAME_OVER_TIMER } from "../../../server/src/shared/Constants";
 
 export function createGameOverScene() {
     k.scene("gameOver", (room: Room<State>, winnerId: number, killfeeds: [string | undefined, string][]) => {
@@ -19,13 +20,13 @@ export function createGameOverScene() {
         showKillfeeds(killfeeds);
 
         // Bottom text to show host restart prompt
+        var timer = GAME_OVER_TIMER;
         let restartText = k.add([
-			k.text("RESTARTING IN ... 5", {size: 22}),
+			k.text("RESTARTING IN ... " + timer.toString(), {size: 22}),
 			k.pos(k.width() / 2, k.height() - 100),
 			k.anchor("center"),
 		]);
 
-        var timer = 2;
 		function startRestartTimer() {
 			setTimeout(() => {
 				timer -= 1;

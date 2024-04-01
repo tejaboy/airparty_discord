@@ -52,17 +52,7 @@ export class StateHandlerRoom extends Room<State> {
 			this.state.setShooting(client.sessionId, isShooting);
 		});
 
-		this.setSimulationInterval((deltaTime) => {
-			if (this.startingGame && !this.gameStarted) {
-				this.broadcast("countdown", "Gaming starting in " + --this.lobbyCountdown);
-
-				if (this.lobbyCountdown == 0) {
-					this.broadcast("start-game");
-					this.startGame();
-					console.log("game-start");
-				}
-			}
-		}, 1000);
+		this.startLobbySimulationInterval();
 	}
 
 	onAuth(_client: any, _options: any, _req: any) {
@@ -86,8 +76,6 @@ export class StateHandlerRoom extends Room<State> {
 	startGame() {
 		this.gameStarted = true;
 		this.setSimulationInterval((deltaTime) => {
-			if (!this.gameStarted) return;
-
 			/* Player Loop */
 			this.state.players.forEach((player, sessionId) => {
 				if (player.health <= 0) {
@@ -212,13 +200,18 @@ export class StateHandlerRoom extends Room<State> {
 	}
 
 	setGameOver(winTeamId: number) {
+		// Broadcast game over
+		this.broadcast("gameOver", {winTeamId: winTeamId, killfeeds: this.killfeeds});
+
+		// Reset required stuffs
+		this.state.resetPlayers();
+		this.killfeeds = [];
 		this.projectiles = [];
 		this.startingGame = false;
 		this.gameStarted = false;
 
-		// Reset all player state
-		this.state.resetPlayers();
-		this.broadcast("gameOver", {winTeamId: winTeamId, killfeeds: this.killfeeds});
+		// Stop game loop and start lobby loop
+		this.startLobbySimulationInterval();
 	}
 
 	createProjectileOnServer(projectile: Projectile) {
@@ -243,6 +236,19 @@ export class StateHandlerRoom extends Room<State> {
 		// Check for collision between projectile and player
 		return (Math.abs(projectileCenterX - playerCenterX) < halfPlayerWidth + halfProjectileWidth &&
 			Math.abs(projectileCenterY - playerCenterY) < halfPlayerHeight + halfProjectileHeight);
+	}
+
+	startLobbySimulationInterval() {
+		this.setSimulationInterval((deltaTime) => {
+			if (this.startingGame && !this.gameStarted) {
+				this.broadcast("countdown", "Gaming starting in " + --this.lobbyCountdown);
+
+				if (this.lobbyCountdown == 0) {
+					this.broadcast("start-game");
+					this.startGame();
+				}
+			}
+		}, 1000);
 	}
 }
 

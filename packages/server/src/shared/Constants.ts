@@ -8,5 +8,5 @@ export const PLAYER_WIDTH = 120;
 export const PLAYER_HEIGHT = 70;
 export const PROJECTILE_WIDTH = 50;
 export const PROJECTILE_HEIGHT = 27;
-export const LOBBY_COUNTDOWN = 0;
+export const LOBBY_COUNTDOWN = 5;
 export const PLAYER_INITIAL_HEALTH = 5;

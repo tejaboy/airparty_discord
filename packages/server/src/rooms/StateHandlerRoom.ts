@@ -9,6 +9,8 @@ export class StateHandlerRoom extends Room<State> {
 	private startingGame: boolean = false;
 	private lobbyCountdown: number = 0;
 	private gameStarted: boolean = false;
+	private killfeeds: [string | undefined, string][] = [];
+
 
 	onCreate(options: IState) {
 		this.setState(new State(options));
@@ -118,7 +120,7 @@ export class StateHandlerRoom extends Room<State> {
 
 				// When hit height or ground, lose the game
                 if (player.y > GAME_HEIGHT || player.y < 0) {
-                    //killfeeds.push([undefined, serverPlayer.name]);
+                    this.killfeeds.push([undefined, player.name]);
                 	this.broadcast("addMessage", `${player.name} crashed!`);
                     this.damagePlayer(player, 100);
                 }
@@ -161,13 +163,15 @@ export class StateHandlerRoom extends Room<State> {
 
 					// Check for collision between projectile and player
 					if (this.isCollidWithPlayer(projectile, player)) {
+						// To add to killfeed before gameOver boardcast, we'll have to check if first.
+						if (player.health - 1 <= 0) {
+							this.killfeeds.push([projectile.owner, player.name]);
+							this.broadcast("addMessage", `${projectile.owner} shot down ${player.name}!`);
+						}
+
 						this.broadcast("removeProjectile", projectile.id);
 						this.damagePlayer(player, 1);
 						isProjectileAlive = false;
-
-						if (player.health <= 0) {
-							this.broadcast("addMessage", `${projectile.owner} shot down ${player.name}!`);
-						}
 
 						return;
 					}
@@ -208,7 +212,7 @@ export class StateHandlerRoom extends Room<State> {
 		this.projectiles = [];
 		this.startingGame = false;
 		this.gameStarted = false;
-		this.broadcast("gameOver", winTeamId);
+		this.broadcast("gameOver", {winTeamId: winTeamId, killfeeds: this.killfeeds});
 	}
 
 	createProjectileOnServer(projectile: Projectile) {

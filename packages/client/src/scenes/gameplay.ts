@@ -138,9 +138,9 @@ export function createGameplayScene() {
         });
 
         // gameOver event
-        room.onMessage("gameOver", (winnerTeamId) => {
+        room.onMessage("gameOver", (message) => {
             room.removeAllListeners();
-            k.go("gameOver", room, winnerTeamId);
+            k.go("gameOver", room, message.winTeamId, message.killfeeds);
         });
     });
 }

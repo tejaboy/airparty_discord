@@ -7,6 +7,8 @@ This repo is an example built on top of two javascript frameworks
 1. [KaboomJS](https://kaboomjs.com/) - A javascript game engine
 2. [Colyseus](https://www.colyseus.io/) - A full-stack state-management library
 
+This repo is lossy based on the (react-colyseus)[https://github.com/discord/embedded-app-sdk/tree/main/examples/react-colyseus] example from Discord.
+
 ## Client architecture
 
 The client (aka front-end) is using [ViteJS](https://vitejs.dev/)'s React Typescript starter project. It has been refactored to replace React with Kaboom.
@@ -54,6 +56,7 @@ Be sure to complete all the steps listed [here](https://discord.com/developers/d
 ## Where do you go from here?
 
 This basic project will create a 2D plane-based fighting game. You may look at [/packages/server/src/room/StateHandlerRoom.ts](/packages/server/src/room/StateHandlerRoom.ts) for the back-end code.
+
 This project feature multiple Kaboom scene. It is located at (/packages/clieent/scenes/*). This is how we create new "page" for the game.
 
 For more resources on Kaboom, please go [here](https://kaboomjs.com).

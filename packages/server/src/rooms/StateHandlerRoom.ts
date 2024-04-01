@@ -65,6 +65,7 @@ export class StateHandlerRoom extends Room<State> {
 
 	// Gameplay Loop
 	startGame() {
+		this.setPatchRate(10);
 		this.gameStarted = true;
 		this.setSimulationInterval((deltaTime) => {
 			/* Player Loop */

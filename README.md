@@ -53,7 +53,7 @@ Be sure to complete all the steps listed [here](https://discord.com/developers/d
 
 ## Where do you go from here?
 
-This basic project will create a 2D plane-based fighting game. You may look at (/packages/server/room/StateHandlerRoom.ts) for the back-end logic.
+This basic project will create a 2D plane-based fighting game. You may look at [/packages/server/room/StateHandlerRoom.ts](/packages/server/room/StateHandlerRoom.ts) for the back-end logic.
 This project feature multiple Kaboom scene. It is located at (/packages/clieent/scenes/*). This is how we create new "page" for the game.
 
 For more resources on Kaboom, please go [here](https://kaboomjs.com).

@@ -15,15 +15,6 @@ export class StateHandlerRoom extends Room<State> {
 	onCreate(options: IState) {
 		this.setState(new State(options));
 
-		// Here's where we would add handlers for updating state
-		this.onMessage('startTalking', (client, _data) => {
-			this.state.startTalking(client.sessionId);
-		});
-
-		this.onMessage('stopTalking', (client, _data) => {
-			this.state.stopTalking(client.sessionId);
-		});
-
 		this.onMessage('ready', (client, _data) => {
 			this.state.setPlayerReady(client.sessionId);
 

@@ -73,20 +73,6 @@ export class State extends Schema {
 		}
 	}
 
-	startTalking(sessionId: string) {
-		const player = this._getPlayer(sessionId);
-		if (player != null) {
-			player.talking = true;
-		}
-	}
-
-	stopTalking(sessionId: string) {
-		const player = this._getPlayer(sessionId);
-		if (player != null) {
-			player.talking = false;
-		}
-	}
-
 	setPlayerReady(sessionId: string) {
 		const player = this._getPlayer(sessionId);
 		if (player != null) {

@@ -184,7 +184,31 @@ export class StateHandlerRoom extends Room<State> {
 
 		if (player.health <= 0) {
 			this.broadcast("playerDeath", player.userId);
+			this.checkGameEndCondition(player.teamId);
 		}
+	}
+
+	checkGameEndCondition(teamId: number) {
+		let players: Array<Player> = teamId == 0 ? this.state.team0Players : this.state.team1Players;
+		
+		let allPlayerDeath = true;
+		for (const player of players) {
+			if (player.health > 0) {
+				allPlayerDeath = false;
+				break;
+			}
+		}
+
+		if (allPlayerDeath) {
+			this.setGameOver(teamId == 0 ? 1 : 0);
+		}
+	}
+
+	setGameOver(winTeamId: number) {
+		this.projectiles = [];
+		this.startingGame = false;
+		this.gameStarted = false;
+		this.broadcast("gameOver", winTeamId);
 	}
 
 	createProjectileOnServer(projectile: Projectile) {

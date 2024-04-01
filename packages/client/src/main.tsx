@@ -4,6 +4,7 @@ import kaboom from 'kaboom'
 import { createHostWaitingScene } from './scenes/host-waiting';
 import { createGameplayScene } from './scenes/gameplay';
 import { GAME_HEIGHT, GAME_WIDTH } from '../../server/src/shared/Constants';
+import { createGameOverScene } from './scenes/gameOver';
 
 // Initialize Kaboom
 export const k = kaboom({
@@ -45,6 +46,7 @@ k.loadSprite("bullet1", "src/images/torpedo.png");
 // Create all scenes
 createHostWaitingScene();
 createGameplayScene();
+createGameOverScene();
 
 setUpDiscordSdk().then(({avatarUri, name, client, room}) => {
 	text.text = "Set-up succes. Welcome, " + name + "!";

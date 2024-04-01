@@ -136,6 +136,12 @@ export function createGameplayScene() {
         room.onMessage("removeProjectile", (projectileId) => {
             k.destroyAll(projectileId);
         });
+
+        // gameOver event
+        room.onMessage("gameOver", (winnerTeamId) => {
+            room.removeAllListeners();
+            k.go("gameOver", room, winnerTeamId);
+        });
     });
 }
 

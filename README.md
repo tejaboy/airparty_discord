@@ -9,7 +9,7 @@ This repo is an example built on top of two javascript frameworks
 
 ## Client architecture
 
-The client (aka front-end) is using [ViteJS](https://vitejs.dev/)'s React Typescript starter project. Refactored to replace the React with Kaboom.
+The client (aka front-end) is using [ViteJS](https://vitejs.dev/)'s React Typescript starter project. It has been refactored to replace React with Kaboom.
 
 - Fast typescript bundling with hot-module-reloading
 - Identical configuration API

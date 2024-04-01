@@ -59,6 +59,7 @@ export class StateHandlerRoom extends Room<State> {
 				if (this.lobbyCountdown == 0) {
 					this.broadcast("start-game");
 					this.startGame();
+					console.log("game-start");
 				}
 			}
 		}, 1000);
@@ -85,6 +86,8 @@ export class StateHandlerRoom extends Room<State> {
 	startGame() {
 		this.gameStarted = true;
 		this.setSimulationInterval((deltaTime) => {
+			if (!this.gameStarted) return;
+
 			/* Player Loop */
 			this.state.players.forEach((player, sessionId) => {
 				if (player.health <= 0) {
@@ -212,6 +215,9 @@ export class StateHandlerRoom extends Room<State> {
 		this.projectiles = [];
 		this.startingGame = false;
 		this.gameStarted = false;
+
+		// Reset all player state
+		this.state.resetPlayers();
 		this.broadcast("gameOver", {winTeamId: winTeamId, killfeeds: this.killfeeds});
 	}
 

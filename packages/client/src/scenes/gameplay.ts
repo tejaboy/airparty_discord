@@ -8,6 +8,8 @@ import { GameObj, Vec2 } from "kaboom";
 
 export function createGameplayScene() {
     k.scene("gameplay", (room: Room<State>) => {
+        k.setBackground(255, 217, 255);
+
         let myPlayer: Player;
         let playerObjects: { [key: string]: GameObj } = {};
 

@@ -1,5 +1,5 @@
 import {Schema, type} from '@colyseus/schema';
-import { BULLET_INTERVAL } from '../shared/Constants';
+import { BULLET_INTERVAL, BULLET_MAG_SIZE, PLAYER_INITIAL_HEALTH } from '../shared/Constants';
 
 export type TPlayerOptions = Pick<Player, 'sessionId' | 'userId' | 'name' | 'avatarUri' | 'talking' | 'spriteId' | 'teamId' | 'x' | 'y'>;
 
@@ -29,7 +29,7 @@ export class Player extends Schema {
 	public bulletTimer: number = BULLET_INTERVAL; // interval between each shot
 
 	@type("number")
-	public bulletLeft: number = 60;
+	public bulletLeft: number = BULLET_MAG_SIZE;
 
 	@type("number")
 	public reloadTimer: number = 0;
@@ -53,7 +53,7 @@ export class Player extends Schema {
 	public movement: number = 0; // 0 == no move, 1 == move up, -1 == move down
 
 	@type("number")
-	public health: number = 8;
+	public health: number = PLAYER_INITIAL_HEALTH;
 
 	// Init
 	constructor({name, userId, avatarUri, sessionId, teamId, spriteId, x, y}: TPlayerOptions) {

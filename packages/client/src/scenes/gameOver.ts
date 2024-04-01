@@ -15,9 +15,32 @@ export function createGameOverScene() {
 			k.pos(k.center()),
 			k.anchor("center"),
 		]);
-
-        console.log(killfeeds);
+        
         showKillfeeds(killfeeds);
+
+        // Bottom text to show host restart prompt
+        let restartText = k.add([
+			k.text("RESTARTING IN ... 5", {size: 22}),
+			k.pos(k.width() / 2, k.height() - 100),
+			k.anchor("center"),
+		]);
+
+        var timer = 2;
+		function startRestartTimer() {
+			setTimeout(() => {
+				timer -= 1;
+	
+				if (timer >= 1) {
+					startRestartTimer();
+                    restartText.text = "RESTARTING IN ... " + timer.toString();
+				} else {
+                    room.removeAllListeners();
+					k.go("host-waiting", room);
+				}
+			}, 1000);
+		}
+
+		startRestartTimer();
     })
 }
 

@@ -1,6 +1,6 @@
 import {Schema, MapSchema, type} from '@colyseus/schema';
 import {TPlayerOptions, Player} from './Player';
-import { GAME_HEIGHT, GAME_WIDTH } from '../shared/Constants';
+import { BULLET_INTERVAL, BULLET_MAG_SIZE, GAME_HEIGHT, GAME_WIDTH, PLAYER_INITIAL_HEALTH } from '../shared/Constants';
 
 export interface IState {
 	roomName: string;
@@ -127,5 +127,22 @@ export class State extends Schema {
 		}
 	
 		return spawnPositions;
+	}
+
+	resetPlayers() {
+		for (const player of this.players.values()) {
+			player.x = player.teamId == 0 ? 100 : GAME_WIDTH - 100;
+			player.ready = false;
+			player.isShooting = false;
+			player.bulletTimer = BULLET_INTERVAL;
+			player.bulletLeft = BULLET_MAG_SIZE;
+			player.reloadTimer = 0;
+			player.angle = 0;
+			player.movement = 0;
+			player.health = PLAYER_INITIAL_HEALTH;
+		}
+
+		this.recalculatePlayerPosition(this.team0Players);
+		this.recalculatePlayerPosition(this.team1Players);
 	}
 }

@@ -9,21 +9,28 @@ export function createHostWaitingScene() {
     k.scene("host-waiting", (room: Room<State>) => {
         let myPlayer: Player;
 
+        k.setBackground(65, 217, 255);
+
+        updateLobby();
         const stateChangeController = room.onStateChange((state) => {
+            updateLobby();
+        });
+
+        function updateLobby() {
             let indexTeam0 = 0;
             let indexTeam1 = 0;
-    
+        
             // Remove previous ui
             k.destroyAll("waiting-ui");
-    
+        
             // Loop through all players
-            state.players.forEach((player: Player, key: string) => {
+            room.state.players.forEach((player: Player, key: string) => {
                 if (player.sessionId == room.sessionId) {
                     myPlayer = player;
                 }
-
+        
                 k.loadSprite("player_" + player.name, player.avatarUri);
-    
+        
                 // Log information
                 console.log(`Player ID: ${key}`);
                 console.log(`Name: ${player.name}`);
@@ -31,7 +38,7 @@ export function createHostWaitingScene() {
                 console.log(`Avatar URI: ${player.avatarUri}`);
                 console.log(`Session ID: ${player.sessionId}`);
                 console.log("------------");
-    
+        
                 // Add player plane
                 const playerSprite = k.add([
                     // List of components, each offers a set of functionalities
@@ -41,7 +48,7 @@ export function createHostWaitingScene() {
                     k.rotate(0),
                     "waiting-ui"
                 ]);
-
+        
                 // Add player avatar
                 playerSprite.add([
                     k.sprite("player_" + player.name),
@@ -50,7 +57,7 @@ export function createHostWaitingScene() {
                     k.scale(0.1),
                     "waiting-ui"
                 ])
-    
+        
                 // Add player name
                 playerSprite.add([
                     k.text(player.name, {size: 12}),
@@ -58,7 +65,7 @@ export function createHostWaitingScene() {
                     k.anchor("center"),
                     "waiting-ui"
                 ]);
-    
+        
                 // Show ready state
                 playerSprite.add([
                     k.text(player.ready ? "READY" : "NOT READY", {size: 12}),
@@ -68,11 +75,12 @@ export function createHostWaitingScene() {
                     "waiting-ui"
                 ]);
             });
+        }
 
-            // Add button to toggle ready state
-            addButton(myPlayer.ready ? "UNREADY" : "READY", k.center(), "waiting-ui", (bg, text) => {
-                room.send('ready');
-            });
+        // Add button to toggle ready state
+        addButton("READY", k.center(), "", (bg, text) => {
+            room.send('ready');
+            text.text = text.text == "READY" ? "UNREADY" : "READY"
         });
 
         // On start-game-countdown message

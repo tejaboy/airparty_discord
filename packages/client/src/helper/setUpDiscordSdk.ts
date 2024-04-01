@@ -34,7 +34,7 @@ export const setUpDiscordSdk = async () => {
 				// 'rpc.activities.write',
 				// "rpc.notifications.read",
 				// "rpc.voice.write",
-				'rpc.voice.read',
+				// "rpc.voice.read",
 				// "webhook.incoming",
 			],
 		});

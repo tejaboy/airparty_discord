@@ -29,7 +29,7 @@ Before we write any code, lets follow the instructions [here](https://discord.co
 
 ## Setting up your environment variables
 
-In order to run your app, you will need to create a `.env` file. Rename the file [/examples/react-colyseus/example.env](/examples/react-colyseus/example.env) to `.env` and fill it in with the appropriate OAuth2 variables. The OAuth2 variables can be found in the OAuth2 tab on the developer portal, as described [here](https://discord.com/developers/docs/activities/building-an-activity#find-your-oauth2-credentials)
+In order to run your app, you will need to create a `.env` file. Rename the file [/example.env](/example.env) to `.env` and fill it in with the appropriate OAuth2 variables. The OAuth2 variables can be found in the OAuth2 tab on the developer portal, as described [here](https://discord.com/developers/docs/activities/building-an-activity#find-your-oauth2-credentials)
 
 ```.env
 # Example .env file

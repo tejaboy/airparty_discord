@@ -8,8 +8,6 @@ export function createGameOverScene() {
     k.scene("gameOver", (room: Room<State>, winnerId: number, killfeeds: [string | undefined, string][]) => {
         k.setBackground(40, 30, 90);
 
-		// let killfeeds: [string | undefined, string][] = message.killfeeds;
-
 		// Center text to show winner team
 		k.add([
 			k.text(winnerId != -1 ? `TEAM ${getTeamColor(winnerId)} WIN!` : "TIE", {size: 60}),

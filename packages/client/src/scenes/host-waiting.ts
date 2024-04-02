@@ -83,7 +83,15 @@ export function createHostWaitingScene() {
 
         // On start-game-countdown message
         room.onMessage("countdown", (message) => {
-            addMessage(message, 1);
+            k.add([
+                k.text(message, { size: 48 }),
+                k.pos(k.width() / 2, k.height() * 0.75),
+                k.anchor("center"),
+                k.color(255, 120, 60),
+                k.lifespan(0.8, {fade: 0.2}),
+                k.opacity(1),
+                k.move(90, 60),
+            ]);
         });
         
         // On start-game message

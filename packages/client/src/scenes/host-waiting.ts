@@ -11,6 +11,12 @@ export function createHostWaitingScene() {
 
         k.setBackground(65, 217, 255);
 
+        k.add([
+			k.sprite("logo"),
+			k.pos(k.width() / 2, k.height() * 0.2),
+			k.anchor("center"),
+		]);
+
         updateLobby();
         const stateChangeController = room.onStateChange((state) => {
             updateLobby();

@@ -43,6 +43,9 @@ k.loadSprite("explosion", "src/images/explosion.png", {
 // Load bullet sprite
 k.loadSprite("bullet1", "src/images/torpedo.png");
 
+// Load logo sprite
+k.loadSprite("logo", "src/images/logo.png");
+
 // Create all scenes
 createHostWaitingScene();
 createGameplayScene();

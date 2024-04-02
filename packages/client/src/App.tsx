@@ -46,6 +46,12 @@ k.loadSprite("bullet1", "src/images/torpedo.png");
 // Load logo sprite
 k.loadSprite("logo", "src/images/logo.png");
 
+// Load background
+k.loadSprite("farground_cloud_1", "src/images/bg/farground_cloud_1.png");
+k.loadSprite("mid_ground_cloud_1", "src/images/bg/mid_ground_cloud_1-min.png");
+k.loadSprite("cloud-bg", "src/images/bg/mid_ground_cloud_2-min.png");
+k.loadSprite("midground_mountains", "src/images/bg/midground_mountains-min.png");
+
 // Create all scenes
 createHostWaitingScene();
 createGameplayScene();

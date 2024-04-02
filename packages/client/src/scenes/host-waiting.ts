@@ -4,12 +4,13 @@ import { State } from "../../../server/src/entities/State";
 import { k } from "../App";
 import { addButton } from "../helper/addButton";
 import { addMessage } from "./gameplay";
+import { GameObj } from "kaboom";
 
 export function createHostWaitingScene() {
     k.scene("host-waiting", (room: Room<State>) => {
         let myPlayer: Player;
-
-        k.setBackground(65, 217, 255);
+        
+        addParallaxBackground();
 
         k.add([
 			k.sprite("logo"),
@@ -105,4 +106,72 @@ export function createHostWaitingScene() {
 
 export function getTeamColor(teamId: number) {
     return teamId == 0 ? "Blue" : "Red";
+}
+
+export function addParallaxBackground() {
+	const SPEED = 100;
+
+	k.setBackground(65, 217, 255);
+
+	k.add([
+		k.sprite("farground_cloud_1"),
+		k.pos(0, 40),
+		k.z(0)
+	]);
+
+	// Mid Cloud
+	const midGroundCloud1 = k.add([
+		k.sprite("mid_ground_cloud_1"),
+		k.pos(0, k.height() - 900),
+		k.move(0, -SPEED),
+		k.z(0)
+	]);
+
+	const midGroundCloud2 = k.add([
+		k.sprite("mid_ground_cloud_1"),
+		k.pos(2048, k.height() - 900),
+		k.move(0, -SPEED),
+		k.z(0)
+	]);
+
+	midGroundCloud1.onUpdate(midResetBg.bind(midGroundCloud1));
+	midGroundCloud2.onUpdate(midResetBg.bind(midGroundCloud2));
+
+	function midResetBg(this: GameObj) {
+		if (this.pos.x <= -2048) {
+			this.pos.x = k.width();
+		}
+	}
+
+	// Top cloud
+	const cloud1 = k.add([
+		k.sprite("cloud-bg"),
+		k.pos(0, k.height() - 474),
+		k.move(0, SPEED),
+		k.z(0)
+	]);
+
+	const cloud2 = k.add([
+		k.sprite("cloud-bg"),
+		k.pos(-2048, k.height() - 474),
+		k.move(0, SPEED),
+		k.z(0)
+	]);
+
+    /*
+	k.add([
+		k.sprite("midground_mountains"),
+		k.pos(0, k.height() - 119),
+		k.z(0)
+	])
+    */
+
+	cloud1.onUpdate(resetBg.bind(cloud1));
+	cloud2.onUpdate(resetBg.bind(cloud2));
+
+	function resetBg(this: GameObj) {
+		if (this.pos.x > k.width()) {
+			this.pos.x = -2048;
+		}
+	}
 }

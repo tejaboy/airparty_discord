@@ -3,7 +3,6 @@ import { Player } from "../../../server/src/entities/Player";
 import { State } from "../../../server/src/entities/State";
 import { k } from "../App";
 import { addButton } from "../helper/addButton";
-import { addMessage } from "./gameplay";
 import { GameObj } from "kaboom";
 
 export function createHostWaitingScene() {

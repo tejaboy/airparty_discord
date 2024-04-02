@@ -8,8 +8,6 @@ import { GameObj } from "kaboom";
 
 export function createHostWaitingScene() {
     k.scene("host-waiting", (room: Room<State>) => {
-        let myPlayer: Player;
-        
         addParallaxBackground();
 
         k.add([
@@ -32,10 +30,6 @@ export function createHostWaitingScene() {
         
             // Loop through all players
             room.state.players.forEach((player: Player, key: string) => {
-                if (player.sessionId == room.sessionId) {
-                    myPlayer = player;
-                }
-        
                 k.loadSprite("player_" + player.name, player.avatarUri);
         
                 // Log information

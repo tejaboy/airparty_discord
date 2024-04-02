@@ -8,16 +8,11 @@ import { GameObj, Vec2 } from "kaboom";
 
 export function createGameplayScene() {
     k.scene("gameplay", (room: Room<State>) => {
-        let myPlayer: Player;
         let playerObjects: { [key: string]: GameObj } = {};
 
         addParallaxBackground();
 
         room.state.players.forEach((player, sessionId) => {
-            if (player.sessionId == room.sessionId) {
-                myPlayer = player;
-            }
-
             // Add player plane
             const playerSprite = k.add([
                 // List of components, each offers a set of functionalities

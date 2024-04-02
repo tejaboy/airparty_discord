@@ -45,8 +45,18 @@ CLIENT_SECRET=PASTE_OAUTH2_CLIENT_SECRET_HERE
 As described [here](https://discord.com/developers/docs/activities/building-an-activity#step-4-running-your-app-locally-in-discord), we encourage using a tunnel solution such as [cloudflared](https://github.com/cloudflare/cloudflared#installing-cloudflared) for local development.
 To run your app locally, run the following from this directory.
 
+Run once only (set-up):
+
 ```
-npm install # only need to run this the first time
+npm install
+cd packages/client
+npm install
+cd ../server
+npm install
+```
+
+Whenever you want to start the development server, run the following command from the root directory. Each command is for one terminal.
+```
 npm run dev
 cloudflared tunnel --url http://localhost:3000 # from another terminal
 ```

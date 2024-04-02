@@ -22,9 +22,6 @@ export function createHostWaitingScene() {
         });
 
         function updateLobby() {
-            let indexTeam0 = 0;
-            let indexTeam1 = 0;
-        
             // Remove previous ui
             k.destroyAll("waiting-ui");
         

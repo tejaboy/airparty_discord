@@ -27,6 +27,9 @@ We're going to manage and synchronize our embedded app's state via [Colyseus](ht
 
 ## Setting up your Discord Application
 
+### Video Tutorial
+You may visit the video tutorial: [https://www.youtube.com/watch?v=k6A2VUbIQio](https://www.youtube.com/watch?v=k6A2VUbIQio).
+
 Before we write any code, lets follow the instructions [here](https://discord.com/developers/docs/activities/building-an-activity#step-1-creating-a-new-app) to make sure your Discord application is set up correctly.
 
 ## Setting up your environment variables
@@ -65,7 +68,7 @@ Be sure to complete all the steps listed [here](https://discord.com/developers/d
 
 ## Where do you go from here?
 
-This basic project will create a 2D plane-based fighting game. You may look at [/packages/server/src/room/StateHandlerRoom.ts](/packages/server/src/room/StateHandlerRoom.ts) for the back-end code.
+This basic project will create a 2D plane-based fighting game. You may look at [/packages/server/src/rooms/StateHandlerRoom.ts](/packages/server/src/rooms/StateHandlerRoom.ts) for the back-end code.
 
 This project feature multiple Kaboom scene. It is located at (/packages/clieent/scenes/*). This is how we create new "page" for the game.
 
